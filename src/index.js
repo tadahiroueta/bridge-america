@@ -1,9 +1,11 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
+import Article from './Article';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
-    nothing for now
+    <Article name='lorem' />
   </StrictMode>
 );
