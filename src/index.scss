@@ -1,23 +1,17 @@
 $primary-color: #0077c0;
 $secondary-color: #6abf69;
 
-body {
-    font-family: 'Poppins', sans-serif;
-
-    strong {
-        color: $primary-color;
-    }
+a {
+    color: $primary-color;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-%main-column {
-    width: 40%;
-    margin: 0 30% 0 15%;
+body {
+    font-family: 'Poppins', sans-serif;
 }
 
 .Article {
-    @extend %main-column;
-}
-
-.Definition {
-    @extend %main-column;
+    width: 40%;
+    margin: 0 30% 0 15%;
 }
