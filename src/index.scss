@@ -1,0 +1,23 @@
+$primary-color: #0077c0;
+$secondary-color: #6abf69;
+
+body {
+    font-family: 'Poppins', sans-serif;
+
+    strong {
+        color: $primary-color;
+    }
+}
+
+%main-column {
+    width: 40%;
+    margin: 0 30% 0 15%;
+}
+
+.Article {
+    @extend %main-column;
+}
+
+.Definition {
+    @extend %main-column;
+}

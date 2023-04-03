@@ -1,6 +1,6 @@
 # Lorem Ipsum: What is it and Why is it Used?
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tortor tellus. Sed sit amet magna odio. Aliquam erat volutpat. Nullam luctus quam sapien, vitae facilisis quam varius ac. Vestibulum euismod semper quam quis sagittis. Aenean eget risus aliquet, ultricies lorem sit amet, tempor metus. Sed quis sapien nec metus malesuada viverra. 
+Lorem ipsum **dolor sit amet**, consectetur adipiscing elit. Mauris eget tortor tellus. Sed sit amet magna odio. Aliquam erat volutpat. Nullam luctus quam sapien, vitae facilisis quam varius ac. Vestibulum euismod semper quam quis sagittis. Aenean eget risus aliquet, ultricies lorem sit amet, tempor metus. Sed quis sapien nec metus malesuada viverra. 
 
 ## The History of Lorem Ipsum
 
