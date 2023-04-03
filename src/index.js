@@ -11,7 +11,6 @@ root.render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-          <Route path='/test' element={<h1>test</h1>} />
           <Route path='article/:id' element={<Article />} />
           
           <Route path="*" element={<FourOFour />} />
