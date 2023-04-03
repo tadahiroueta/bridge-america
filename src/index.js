@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './index.scss';
 import Article from './components/Article';
-import Definition from './components/Definition';
+import FourOFour from './components/FourOFour';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,9 +12,8 @@ root.render(
     <BrowserRouter>
       <Routes>
           <Route path='article/:id' element={<Article />} />
-          <Route path='definition/:term' element={<Definition />} />
           
-          <Route path="*" element={<h1>404</h1>} />
+          <Route path="*" element={<FourOFour />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

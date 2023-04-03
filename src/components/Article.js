@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import FourOFour from './FourOFour';
 
 export default function Article() {
     const [markdown, setMarkdown] = useState('');
+    const [fourOFour, setFourOFour] = useState(false);
     const { id } = useParams();
 
     useEffect(() => {
         let file;
-        try { file = require(`../content/articles/${id}.md`) }
-        catch (e) { file = require(`../content/404.md`) }
+        try { file = require(`../content/${id}.md`) }
+        catch (e) { setFourOFour(true) }
 
         fetch(file)
             .then(response => response.text())
             .then(data => setMarkdown(data))
     }, [id])
 
-    return (
+    return fourOFour ? <FourOFour /> : (
         <div className='Article'>
             <ReactMarkdown>{markdown}</ReactMarkdown>
         </div>
