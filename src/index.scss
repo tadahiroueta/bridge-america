@@ -1,5 +1,5 @@
-$primary-color: #0077c0;
-$secondary-color: #6abf69;
+$primary-color: #3f1111;
+$secondary-color: #F9ECE9;
 
 a {
     color: $primary-color;
@@ -9,9 +9,84 @@ a {
 
 body {
     font-family: 'Poppins', sans-serif;
-}
+    margin: 0;
+    background-color: $secondary-color;
 
-.Article {
-    width: 40%;
-    margin: 0 30% 0 15%;
+    .Layout {
+
+        header {
+            height: 10vh;
+            width: 62.5%;
+            padding: 0 18.75%;
+            background-color: $primary-color;
+            align-items: center;
+            display: inline-block;
+
+            .LeftNavigation {
+                float: left;
+                width: 70%;
+                height: 100%;
+                align-items: center;
+
+                display: flex;
+                * { float: left }
+
+                $horizonatal-margin: 1.75rem;
+
+                img {
+                    height: 65%;
+                    margin-right: $horizonatal-margin;
+                }
+    
+                .Links {
+                    a {
+                        margin: 0 $horizonatal-margin;
+    
+                        h3 {
+                            color: white;
+                            font-weight: normal;
+            }}}}
+
+
+            h1 {
+                margin: .3rem 0 0;
+                float: right;
+                color: white;
+                font-size: 2.5rem;
+                transform: rotate(-90deg);
+            }
+
+        }
+    
+        .Article {
+            margin: 2.5vh 18.75%;
+            width: 62.5%;
+            display: inline-block;
+
+            .Content {
+                $padding: 1.5rem;
+
+                float: left;
+                padding: $padding / 2 $padding;
+                width: calc(65% - 2 * $padding);
+                background-color: white;
+                border-radius: 1.5rem;
+                
+
+                h1 {
+                    margin: 0 0 .5rem;
+                    font-size: 2.5rem;
+                    color: $primary-color;
+                }
+
+                h3 {
+                    margin: 0;
+                    font-size: 1.1rem;
+                    color: $primary-color;
+                }
+            }
+        }
+        
+    }    
+
 }
