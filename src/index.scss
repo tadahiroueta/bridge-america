@@ -49,10 +49,11 @@ body {
 
 
             h1 {
-                margin: .3rem 0 0;
+                margin: 0 1rem;
                 float: right;
                 color: white;
-                font-size: 2.5rem;
+                font-size: 3.25rem;
+                font-weight: lighter;
                 transform: rotate(-90deg);
             }
 
@@ -63,14 +64,18 @@ body {
             width: 62.5%;
             display: inline-block;
 
-            .Content {
-                $padding: 1.5rem;
-
+            $padding: 1.5rem;
+            
+            div {
                 float: left;
                 padding: $padding / 2 $padding;
-                width: calc(65% - 2 * $padding);
                 background-color: white;
                 border-radius: 1.5rem;
+            }
+
+            .Content {
+                margin-right: $padding;
+                width: calc(65% - 2 * $padding);
                 
 
                 h1 {
@@ -83,10 +88,34 @@ body {
                     margin: 0;
                     font-size: 1.1rem;
                     color: $primary-color;
+            }}
+            
+            .MetaInformation {
+                margin-left: $padding;
+                padding-bottom: .75 * $padding;
+                width: calc(35% - 4 * $padding);
+
+                * { 
+                    margin: 0;
+                    font-weight: normal;
                 }
+
+                h3 span {
+                    font-size: 2rem;
+                    font-weight: 600; // semi bold
+                }
+
+                h4 { text-align: right }
+        }}
+        
+        footer {
+            margin: 12vh 0 10vh;
+            
+            p { 
+                text-align: center;
+                font-size: .8rem;
             }
         }
-        
     }    
 
 }
