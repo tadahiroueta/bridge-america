@@ -6,7 +6,7 @@ export default function Article({ id = null }) {
     const [content, setContent] = useState({});
 
     const params = useParams();
-    if (id == null) id = params.id;
+    if (id === null) id = params.id;
     
     const handleSetContent = (data) => {
         if (data.charAt(0) == "!") {
@@ -33,7 +33,7 @@ export default function Article({ id = null }) {
 
     const addLinks = (markdown) => { 
         const terms = require("../content/terms.json")
-            .filter(term => term != id) // don't link to self
+            .filter(term => term !== id) // don't link to self
             .sort((a, b) => b.length - a.length) // check longer terms first
 
         for (const term of terms)
