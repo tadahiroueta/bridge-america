@@ -18,7 +18,7 @@ export default function Article({ id = null }) {
         setContent({
             credit: lines[0].trim(),
             date: lines[1].trim(),
-            markdown: lines.slice(2).join('\n')
+            markdown: addLinks(lines.slice(2).join('\n'))
     })}
 
     useEffect(() => {
@@ -30,6 +30,19 @@ export default function Article({ id = null }) {
             .then(response => response.text())
             .then(data => handleSetContent(data))
     }, [id])
+
+    const addLinks = (markdown) => { 
+        const terms = require("../content/terms.json")
+            .filter(term => term != id) // don't link to self
+            .sort((a, b) => b.length - a.length) // check longer terms first
+
+        for (const term of terms)
+            markdown = markdown.replace(
+                new RegExp(term.replace(/-/i, ' '), 'gi'), 
+                `[$&](/${term})`
+            )
+        return markdown
+    }
 
     return (
         <div className='Article'>
