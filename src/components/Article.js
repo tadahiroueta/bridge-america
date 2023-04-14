@@ -1,14 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import FourOFour from './FourOFour';
 
-export default function Article() {
+export default function Article({ id = null }) {
     const [content, setContent] = useState({});
-    const [fourOFour, setFourOFour] = useState(false);
-    const { id } = useParams();
 
+    const params = useParams();
+    if (id == null) id = params.id;
+    
     const handleSetContent = (data) => {
+        if (data.charAt(0) == "!") {
+            setContent({ markdown: data })
+            return
+        }
+
         const lines = data.trim().split('\n');
         setContent({
             credit: lines[0].trim(),
@@ -19,24 +24,26 @@ export default function Article() {
     useEffect(() => {
         let file;
         try { file = require(`../content/${id}.md`) }
-        catch (e) { setFourOFour(true) }
+        catch (e) { file = require("../content/404.md") }
 
         fetch(file)
             .then(response => response.text())
             .then(data => handleSetContent(data))
     }, [id])
 
-    return fourOFour ? <FourOFour /> : (
+    return (
         <div className='Article'>
 
             <div className='Content'>
                 <ReactMarkdown>{content.markdown}</ReactMarkdown>
             </div>
 
-            <div className='MetaInformation'>
-                <h3>by <span>{content.credit}</span></h3>
-                <h4>{content.date}</h4>
-            </div>
+            { content.credit == null ? null : (
+                <div className='MetaInformation'>
+                    <h3>by <span>{content.credit}</span></h3>
+                    <h4>{content.date}</h4>
+                </div>
+            ) }
         
         </div>
     );
