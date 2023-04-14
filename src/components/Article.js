@@ -9,7 +9,7 @@ export default function Article({ id = null }) {
     if (id === null) id = params.id;
     
     const handleSetContent = (data) => {
-        if (data.charAt(0) == "!") {
+        if (data.charAt(0) === "!") {
             setContent({ markdown: data })
             return
         }
@@ -29,7 +29,7 @@ export default function Article({ id = null }) {
         fetch(file)
             .then(response => response.text())
             .then(data => handleSetContent(data))
-    }, [id])
+    })
 
     const addLinks = (markdown) => { 
         const terms = require("../content/terms.json")
