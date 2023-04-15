@@ -58,13 +58,13 @@ body {
             }
 
         }
+
+        $padding: 1.5rem;
     
         .Article {
-            margin: 2.5vh 18.75%;
+            margin: $padding 18.75%;
             width: 62.5%;
             display: inline-block;
-
-            $padding: 1.5rem;
             
             div {
                 float: left;
@@ -107,6 +107,44 @@ body {
 
                 h4 { text-align: right }
         }}
+
+        .Write {
+            $width: calc(14 / 16 * 100%);
+            margin: 0 calc((100% - $width) /2);
+            width: $width;
+            display: inline-block;
+
+            > div { 
+                float: left;
+                width: 50%;
+            }
+
+            .Article {
+                display: block;
+                margin: 0;
+
+                > div { float: none }
+
+                .Content { 
+                    width: calc(100% - 4 * $padding);
+                    margin: $padding; 
+                }
+
+                .MetaInformation {
+                    float: right;
+                    margin-right: $padding;
+                    width: calc(100% * 2.5/6)
+            }}
+
+            .Right {
+
+                textarea {
+                    margin: $padding;
+                    padding: $padding / 2 $padding;
+                    width: calc(100% - 4 * $padding);
+                }
+            }
+        }
         
         footer {
             margin: 12vh 0 10vh;
