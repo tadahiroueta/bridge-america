@@ -14,9 +14,6 @@ export default function Layout() {
                     <Link to='/about'>
                         <h3>About</h3>
                     </Link>
-                    <Link to='/write'>
-                        <h3>Write</h3>
-                    </Link>
                 </div>
             </div>
 
