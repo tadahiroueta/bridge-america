@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
-export default function Article({ id = null }) {
+export default function Article({ id = null, markdown=null }) {
     const [content, setContent] = useState({});
 
     const params = useParams();
-    if (id === null) id = params.id;
+    if (markdown === null && id === null) id = params.id;
     
     const handleSetContent = (data) => {
         if (data.charAt(0) === "!") {
@@ -21,7 +21,13 @@ export default function Article({ id = null }) {
             markdown: addLinks(lines.slice(2).join('\n'))
     })}
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
+        if (markdown) {
+            handleSetContent(markdown);
+            return
+        }
+
         let file;
         try { file = require(`../content/${id}.md`) }
         catch (e) { file = require("../content/404.md") }
@@ -29,7 +35,7 @@ export default function Article({ id = null }) {
         fetch(file)
             .then(response => response.text())
             .then(data => handleSetContent(data))
-    })
+    }, [markdown])
 
     const addLinks = (markdown) => { 
         const terms = require("../content/terms.json")
