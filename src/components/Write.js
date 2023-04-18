@@ -10,7 +10,7 @@ export default function Write() {
             .then(response => response.text())
             .then(data => setMarkdown(data))
         
-        setTimeout(() => updateHeight(), 50)
+        setTimeout(() => updateHeight(), 100)
     }, [])
 
     const updateHeight = () => {

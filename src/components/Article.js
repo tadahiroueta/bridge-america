@@ -21,7 +21,6 @@ export default function Article({ id = null, markdown=null }) {
             markdown: addLinks(lines.slice(2).join('\n'))
     })}
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (markdown) {
             handleSetContent(markdown);
@@ -35,6 +34,8 @@ export default function Article({ id = null, markdown=null }) {
         fetch(file)
             .then(response => response.text())
             .then(data => handleSetContent(data))
+            
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [markdown])
 
     const addLinks = (markdown) => { 
