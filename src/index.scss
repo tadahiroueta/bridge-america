@@ -148,6 +148,7 @@ body {
                     resize: none;
                     font-family: "Courier", sans-serif;
                     font-size: 1rem;
+                    overflow: hidden;
                 }
 
                 input {
@@ -162,6 +163,8 @@ body {
                     font-weight: 600; // semi bold
                     color: $primary-color;
                 }
+
+                input:hover { cursor: pointer }
             }
         }
         

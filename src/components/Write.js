@@ -1,16 +1,18 @@
 import { useEffect, useState, useRef } from "react"
+import axios from "axios"
 import Article from "./Article"
 
 export default function Write() {
-    const [markdown, setMarkdown] = useState("")
+    const [markdown, setMarkdown] = useState(" ")
+    const [submitted, setSubmitted] = useState(false)
     const reference = useRef(null);
 
     useEffect(() => {
-        fetch(require("../content/write.md"))
+        fetch("https://server.bridgeamerica.tadahiroueta.com/write")
             .then(response => response.text())
             .then(data => setMarkdown(data))
         
-        setTimeout(() => updateHeight(), 100)
+        for (const time of [50, 100, 200, 400]) setTimeout(() => updateHeight(), time)
     }, [])
 
     const updateHeight = () => {
@@ -24,11 +26,16 @@ export default function Write() {
     }
 
     // eslint-disable-next-line
-    const handleSubmit = () => { {} }
+    const handleSubmit = () => 
+        axios.post("https://server.bridgeamerica.tadahiroueta.com/submit", { markdown })
+            .then(response => { if (response.ok) setSubmitted(true) });
     
-    return (
+    
+    return ( submitted ? <Article markdown={markdown} /> :
+
         <div className='Write'>
             <Article markdown={markdown} />
+        
             <div className="Right">
                 <textarea ref={reference} value={markdown} onChange={handleChange} />
                 {/* submit button */}
