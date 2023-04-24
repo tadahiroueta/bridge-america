@@ -4,15 +4,16 @@ import Article from "./Article"
 
 export default function Write() {
     const [markdown, setMarkdown] = useState(" ")
-    const [submitted, setSubmitted] = useState(false)
+    const [submit, setSubmit] = useState("Submit")
     const reference = useRef(null);
 
     useEffect(() => {
         fetch("https://server.bridgeamerica.tadahiroueta.com/write")
             .then(response => response.text())
-            .then(data => setMarkdown(data))
-        
-        for (const time of [50, 100, 200, 400]) setTimeout(() => updateHeight(), time)
+            .then(data => {
+                setMarkdown(data)
+                for (const time of [50, 100, 200, 400]) setTimeout(() => updateHeight(), time)
+            })
     }, [])
 
     const updateHeight = () => {
@@ -26,20 +27,20 @@ export default function Write() {
     }
 
     // eslint-disable-next-line
-    const handleSubmit = () => 
+    const handleSubmit = () => {
+        setSubmit("Submitting...")
         axios.post("https://server.bridgeamerica.tadahiroueta.com/submit", { markdown })
-            .then(response => { if (response.ok) setSubmitted(true) });
+            .then(response => { if (response.status === 200) setSubmit("Submitted") });
+    }
     
-    
-    return ( submitted ? <Article markdown={markdown} /> :
+    return ( submit === "Submitted" ? <Article markdown={markdown} isSubmitted={true} /> :
 
         <div className='Write'>
             <Article markdown={markdown} />
         
             <div className="Right">
                 <textarea ref={reference} value={markdown} onChange={handleChange} />
-                {/* submit button */}
-                <input type="submit" value="Submit" onClick={handleSubmit} />
+                <input type="submit" value={submit} onClick={handleSubmit} />
             </div>
         </div>
     )

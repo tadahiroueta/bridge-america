@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
-export default function Article({ id=null, markdown=null }) {
+export default function Article({ id=null, markdown=null, isSubmitted=false }) {
     const [content, setContent] = useState({});
 
     const params = useParams();
@@ -14,11 +14,14 @@ export default function Article({ id=null, markdown=null }) {
         if (firstCharacter === "!" || firstCharacter === " ") content.markdown = data;
         else {
             const lines = data.trim().split('\n');
-            content = {
-                credit: lines[0].trim(),
-                date: lines[1].trim(),
-                markdown: lines.slice(2).join('\n')
-        }}
+            try {
+                content = {
+                    credit: lines[0].trim(),
+                    date: lines[1].trim(),
+                    markdown: lines.slice(2).join('\n')
+            }}
+            catch (e) { content.markdown = data } // writer deleted the placeholder
+        }
         
         if (markdown) {
             setContent(content)
@@ -40,13 +43,16 @@ export default function Article({ id=null, markdown=null }) {
     })}
 
     useEffect(() => {
-        if (markdown) {
+        if (markdown !== null) {
             handleSetContent(markdown);
             return
         }
 
         fetch(`https://server.bridgeamerica.tadahiroueta.com/${id}`)
-            .then(response => response.text())
+            .then(response => {
+                if (response.status === 404) throw new Error("404")
+                return response.text()
+            })
             .then(data => handleSetContent(data))
 
             .catch(() => { fetch("https://server.bridgeamerica.tadahiroueta.com/404")
@@ -56,6 +62,13 @@ export default function Article({ id=null, markdown=null }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     })}, [id, markdown])
 
+    const metaInformation = () => content.credit == null ? null : (
+        <div className='MetaInformation'>
+            <h3>by <span>{content.credit}</span></h3>
+            <h4>{content.date}</h4>
+        </div>
+    );
+
     return (
         <div className='Article'>
 
@@ -63,12 +76,20 @@ export default function Article({ id=null, markdown=null }) {
                 <ReactMarkdown>{content.markdown}</ReactMarkdown>
             </div>
 
-            { content.credit == null ? null : (
-                <div className='MetaInformation'>
-                    <h3>by <span>{content.credit}</span></h3>
-                    <h4>{content.date}</h4>
+            { !isSubmitted ? metaInformation() : (
+                <div className="SubmittedRight">
+                    { metaInformation() }
+
+                    <div className="Emailed">
+                        <h3>submission emailed to</h3>
+                        <h4><span>tadahiroueta@gmail.com</span></h4>
+                    </div>
+
+                    <div className="Thanks">
+                        <h3><span>THANK YOU!</span></h3>
+                    </div>
                 </div>
-            ) }
+            )}
         
         </div>
     );
