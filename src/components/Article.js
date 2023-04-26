@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
+const serverURL = "https://bridge-america-server.onrender.com/"
+
 export default function Article({ id=null, markdown=null, isSubmitted=false }) {
     const [content, setContent] = useState({});
 
@@ -27,7 +29,7 @@ export default function Article({ id=null, markdown=null, isSubmitted=false }) {
             setContent(content)
             return
         }
-        fetch("https://server.bridgeamerica.tadahiroueta.com/terms")
+        fetch(serverURL + "terms")
             .then(response => response.json()) // just learned about this
             .then(json => {
                 return json
@@ -48,14 +50,14 @@ export default function Article({ id=null, markdown=null, isSubmitted=false }) {
             return
         }
 
-        fetch(`https://server.bridgeamerica.tadahiroueta.com/${id}`)
+        fetch(serverURL + id)
             .then(response => {
                 if (response.status === 404) throw new Error("404")
                 return response.text()
             })
             .then(data => handleSetContent(data))
 
-            .catch(() => { fetch("https://server.bridgeamerica.tadahiroueta.com/404")
+            .catch(() => { fetch(serverURL + "404")
                 .then(response => response.text())
                 .then(data => {if (!markdown) handleSetContent(data) })
                         

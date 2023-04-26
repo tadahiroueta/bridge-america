@@ -2,13 +2,15 @@ import { useEffect, useState, useRef } from "react"
 import axios from "axios"
 import Article from "./Article"
 
+const serverURL = "https://bridge-america-server.onrender.com/"
+
 export default function Write() {
     const [markdown, setMarkdown] = useState(" ")
     const [submit, setSubmit] = useState("Submit")
     const reference = useRef(null);
 
     useEffect(() => {
-        fetch("https://server.bridgeamerica.tadahiroueta.com/write")
+        fetch(serverURL + "write")
             .then(response => response.text())
             .then(data => {
                 setMarkdown(data)
@@ -29,7 +31,7 @@ export default function Write() {
     // eslint-disable-next-line
     const handleSubmit = () => {
         setSubmit("Submitting...")
-        axios.post("https://server.bridgeamerica.tadahiroueta.com/submit", { markdown })
+        axios.post(serverURL + "submit", { markdown })
             .then(response => { if (response.status === 200) setSubmit("Submitted") });
     }
     
