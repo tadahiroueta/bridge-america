@@ -6,14 +6,15 @@ const serverURL = "https://bridge-america-server.onrender.com/"
 
 export default function Article({ id=null, markdown=null, isSubmitted=false }) {
     const [content, setContent] = useState({});
+    const [terms, setTerms] = useState([]);
 
     const params = useParams();
     if (markdown === null && id === null) id = params.id;
-    
-    const handleSetContent = (data) => {
+
+    const handleSetContent = data => {
         let content = {}
         const firstCharacter = data.charAt(0);
-        if (firstCharacter === "!" || firstCharacter === " ") content.markdown = data;
+        if (firstCharacter === "!" || firstCharacter === " " || firstCharacter === "#") content.markdown = data;
         else {
             const lines = data.trim().split('\n');
             try {
@@ -24,25 +25,34 @@ export default function Article({ id=null, markdown=null, isSubmitted=false }) {
             }}
             catch (e) { content.markdown = data } // writer deleted the placeholder
         }
-        
-        if (markdown) {
-            setContent(content)
-            return
-        }
+        setContent(content)
+    }
+
+    const addLinks = () => {
+        if (terms.length === 0 || content.markdown == null) return; // can't do nothing yet
+    
+        const altContent = { ...content }
+        const altTerms = terms.filter(term => term !== id) // don't link to self
+            .sort((a, b) => b.length - a.length); // check longer terms first
+
+        for (const term of altTerms) {
+            altContent.markdown = altContent.markdown.replace(
+                new RegExp(
+                    // - for ' ' and check that it's not already linked
+                    `(?<!\\[|\\-|\\/)\\b${term.replace(/-/i, ' ')}\\b(?!\\]|\\-)`, 'gi'
+                ), `[$&](/${term})`
+        )} 
+        setContent(altContent)
+    }
+
+    useEffect(addLinks, [terms, content, addLinks])
+
+    // get terms
+    useEffect(() => {
         fetch(serverURL + "terms")
-            .then(response => response.json()) // just learned about this
-            .then(json => {
-                return json
-                    .filter(term => term !== id) // don't link to self
-                    .sort((a, b) => b.length - a.length) // check longer terms first
-            })
-            .then(terms => {
-                for (const term of terms){
-                    content.markdown = content.markdown.replace(
-                        new RegExp(term.replace(/-/i, ' '), 'gi'), `[$&](/${term})`
-                    )}
-                setContent(content)
-    })}
+            .then(response => response.json())
+            .then(setTerms)
+    }, [])
 
     useEffect(() => {
         if (markdown !== null) {
@@ -61,7 +71,6 @@ export default function Article({ id=null, markdown=null, isSubmitted=false }) {
                 .then(response => response.text())
                 .then(data => {if (!markdown) handleSetContent(data) })
                         
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     })}, [id, markdown])
 
     const metaInformation = () => content.credit == null ? null : (

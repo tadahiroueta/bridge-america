@@ -28,7 +28,6 @@ export default function Write() {
         updateHeight()
     }
 
-    // eslint-disable-next-line
     const handleSubmit = () => {
         setSubmit("Submitting...")
         axios.post(serverURL + "submit", { markdown })
