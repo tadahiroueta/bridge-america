@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => (
-	<div className="mb-6 w-full h-20 bg-primary flex justify-center items-center">
+	<div className="mb-6 h-20 bg-primary flex justify-center items-center">
 		<div className="w-2/3 flex justify-between items-center text-white">
 
 			<div className="flex items-center space-x-16">

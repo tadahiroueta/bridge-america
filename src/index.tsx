@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout';
+import Article from './components/Article';
 import './index.scss';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -11,7 +12,7 @@ root.render(
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="" element={<h1>your mum</h1>} />
+          <Route path="/:term" element={<Article />} />
         </Routes>
         </Layout>
     </BrowserRouter>

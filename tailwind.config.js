@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     extend: {
       colors: { primary: "#56A254" },
-      fontFamily: { sans: [ "Poppins", ...defaultTheme.fontFamily.sans ]}
+      fontFamily: { sans: [ "Poppins", ...defaultTheme.fontFamily.sans ]},
+      width: { "160": "40rem" }
   }},
   plugins: [],
 }

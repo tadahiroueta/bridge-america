@@ -7,7 +7,7 @@ const client = new MongoClient(uri, { serverApi: { // Stable API version
     deprecationErrors: true,
 }});
 
-async function getMarkdown(name) { 
+async function getArticle(name) { 
     await client.connect();
     const document = await client.db('database').collection('articles')
         .findOne({ name });
@@ -31,4 +31,4 @@ async function upload(name, markdown) {
     client.close();
 }
 
-module.exports = { getMarkdown, getTerms, upload };
+module.exports = { getArticle, getTerms, upload };
