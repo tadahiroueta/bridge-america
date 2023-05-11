@@ -19,9 +19,9 @@ export default function Article() {
         <div className="flex justify-center">
             <div className="mb-32 w-2/3 flex justify-between">
                 
-                <ReactMarkdown className="px-7 py-6 w-160 bg-white prose">{ lorem }</ReactMarkdown>
+                <ReactMarkdown className="px-7 py-6 w-160 bg-white prose prose-h1:text-primary  prose-h1:mb-6 prose-h3:font-bold prose-h3:mt-0">{ lorem }</ReactMarkdown>
                 
-                <div className="px-6 py-5 w-80 h-min bg-white">
+                <div className="px-6 py-5 w-72 h-min bg-white">
                     <div className="text-xl">by <span className="text-3xl font-semibold text-primary">Hugh Jass</span></div>
                     <div className="flex justify-end text-lg">04/10/2023</div>
                 </div>
