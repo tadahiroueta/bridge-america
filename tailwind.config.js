@@ -6,7 +6,6 @@ module.exports = {
   theme: { extend: {
     colors: { primary: "#56A254" },
     fontFamily: { sans: [ "Poppins", ...defaultTheme.fontFamily.sans ]},
-    width: { "160": "40rem" },
     height: { "18": "4.5rem" }
   }},
   plugins: [ require("@tailwindcss/typography") ],

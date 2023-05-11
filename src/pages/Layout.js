@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 function Navbar() { return (
-    <div className="mb-6 h-18 bg-primary flex justify-center items-center">
+    <div className="mb-6 h-[4.5rem] bg-primary flex justify-center items-center">
 		<div className="w-2/3 flex justify-between items-center text-white">
 
 			<div className="flex items-center space-x-16">
@@ -31,6 +31,6 @@ export default function Layout({ children }) { return (
     <div className="bg-zinc-100">
         <Navbar />
 		{ children }
-        <div className="pb-20 flex justify-center text-sm">Not affiliated with FISD&emsp;&emsp;&emsp;|&emsp;&emsp;&emsp;tadahiroueta@gmail.com</div>
+        <div className="mt-32 pb-20 flex justify-center text-sm">Not affiliated with FISD&emsp;&emsp;&emsp;|&emsp;&emsp;&emsp;tadahiroueta@gmail.com</div>
     </div>
 )}
