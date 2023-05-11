@@ -1,4 +1,6 @@
-import { ArticleStructure, Markdown, Metadata } from "../components";
+import { useRef, useState } from "react";
+
+import { ArticleStructure, Card, Markdown, Metadata } from "../components";
 
 const writy = `
 # {title}
@@ -22,15 +24,26 @@ const writy2 =
 mm/dd/yyyy
 ` + writy;
 
+/** where people can submit articles */
 export default function Write() {
+    const reference = useRef(null);
+    const [markdownText, setMarkdownText] = useState(writy2);
+
+    const handleChange = () => {}
+
+    const handleClick = () => {}
+
     return (
         <ArticleStructure>
             <div className="">
                 <Markdown markdownText={ writy } />
                 <Metadata author="{name}" date="04/10/2023" />
             </div>
-            <div className="">
-                
+            <div>
+                <textarea ref={reference} value={markdownText} onChange={handleChange}></textarea>
+                <button onClick={handleClick}>
+                    <Card>Submit</Card>
+                </button>
             </div>
         </ArticleStructure>
     )

@@ -1,4 +1,4 @@
-import { ArticleStructure, CardOnRight, Markdown, Metadata } from '../components';
+import { ArticleStructure, Markdown, Metadata } from '../components';
 
 const lorem = 
 `# Lorem Ipsum

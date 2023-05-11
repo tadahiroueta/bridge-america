@@ -2,17 +2,17 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import Write from "./pages/Write";
 import Layout from "./pages/Layout";
 import Article from "./pages/Article";
-import Skirmish from "./Skirmish";
 import "./index.scss";
-import Write from "./pages/Write";
+import Skirmish from "./Skirmish"; // TODO remove
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <StrictMode>
+  <StrictMode> {/* avoid build errors */}
     <BrowserRouter>
-      <Layout>
+      <Layout> {/* always on */}
         <Routes>
 
           <Route path="write" element={<Write />} />
