@@ -1,4 +1,4 @@
-import ReactMarkdown from 'react-markdown'
+import { ArticleStructure, CardOnRight, Markdown, Metadata } from '../components';
 
 const lorem = 
 `# Lorem Ipsum
@@ -16,17 +16,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla blandit tellus et
 
 export default function Article() {
     return (
-        <div className="flex justify-center">
-            <div className="mb-32 w-2/3 flex justify-between">
-                
-                <ReactMarkdown className="px-7 py-6 w-160 bg-white prose prose-h1:text-primary  prose-h1:mb-6 prose-h3:font-bold prose-h3:mt-0">{ lorem }</ReactMarkdown>
-                
-                <div className="px-6 py-5 w-72 h-min bg-white">
-                    <div className="text-xl">by <span className="text-3xl font-semibold text-primary">Hugh Jass</span></div>
-                    <div className="flex justify-end text-lg">04/10/2023</div>
-                </div>
-            
-            </div>
-        </div>
+        <ArticleStructure>
+            <Markdown markdownText={ lorem } />
+            <Metadata author="Hugh Jass" date="04/10/2023" />
+        </ArticleStructure>
     )
 }

@@ -2,9 +2,11 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Layout from "./components/Layout";
-import Article from "./components/Article";
+import Layout from "./pages/Layout";
+import Article from "./pages/Article";
+import Skirmish from "./Skirmish";
 import "./index.scss";
+import Write from "./pages/Write";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -12,8 +14,12 @@ root.render(
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/:term" element={<Article />} />
-          <Route path="/" element={"404"} />
+
+          <Route path="write" element={<Write />} />
+          <Route path="sub" element={<Skirmish />} />
+          <Route path=":term" element={<Article />} />
+          <Route path="" element={"404"} />
+        
         </Routes>
       </Layout>
     </BrowserRouter>
