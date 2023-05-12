@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client"; // client is more proper, apparently
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Write from "./pages/Write";

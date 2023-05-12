@@ -1,24 +1,26 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+import { app, credentials } from '../mongo';
 import { ArticleStructure, Markdown, Metadata } from '../components';
 
-const lorem = 
-`# Lorem Ipsum
-
-### Lorem Ipsum: What is it and Why is it Used?
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget tortor tellus. Sed sit amet magna odio. Aliquam erat volutpat. Nullam luctus quam sapien, vitae facilisis quam varius ac.
-
-### The History of Lorem Ipsum
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam elementum varius lorem vel suscipit. Nunc ornare nulla in tortor hendrerit ultricies. Vestibulum et massa eget lacus semper pharetra. Sed sit amet eleifend ipsum. Quisque id nibh ac lectus aliquam placerat.
-
-### Why is Lorem Ipsum Used?
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla blandit tellus et metus vestibulum, sed pharetra augue commodo. Aenean faucibus libero in massa ullamcorper euismod. Sed ornare ex ac arcu euismod, ut bibendum nulla sollicitudin. Sed viverra vel purus id mollis. Donec id turpis ut libero malesuada consequat.`;
-
 export default function Article() {
+    const [content, setContent] = useState({})
+    
+    const { term } = useParams()
+
+    useEffect(() => { 
+        (async () => {
+            const user = await app.logIn(credentials);
+            user.functions.getArticle(term)
+                .then(article => setContent(article));
+        })();
+    }, [term])
+
     return (
         <ArticleStructure>
-            <Markdown markdownText={ lorem } />
-            <Metadata author="Hugh Jass" date="04/10/2023" />
+            <Markdown markdownText={ content.markdown } />
+            <Metadata author={ content.author } date={ content.date } />
         </ArticleStructure>
     )
 }
