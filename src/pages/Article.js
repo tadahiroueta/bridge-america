@@ -22,5 +22,4 @@ export default function Article() {
             <Markdown markdownText={ content.markdown } />
             <Metadata author={ content.author } date={ content.date } />
         </ArticleStructure>
-    )
-}
+)}

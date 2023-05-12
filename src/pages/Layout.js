@@ -28,9 +28,9 @@ function Navbar() { return (
 )}
 
 export default function Layout({ children }) { return (
-    <div className="bg-zinc-100">
+    <div className="min-h-screen flex flex-col bg-zinc-100">
         <Navbar />
 		{ children }
-        <div className="mt-32 pb-20 flex justify-center text-sm">Not affiliated with FISD&emsp;&emsp;&emsp;|&emsp;&emsp;&emsp;tadahiroueta@gmail.com</div>
+        <div className="mt-32 pb-20 flex-grow flex items-end justify-center text-sm">Not affiliated with FISD&emsp;&emsp;&emsp;|&emsp;&emsp;&emsp;tadahiroueta@gmail.com</div>
     </div>
 )}
