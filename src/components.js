@@ -21,7 +21,7 @@ export function Card({ className, children }) { return (
 
 /** converts markdown to styled html */
 export function Markdown({ markdownText }) { return (
-    <ReactMarkdown className="px-7 py-6 w-[40rem] bg-white prose prose-h1:text-primary prose-h1:mb-6 prose-h3:font-bold prose-h3:mt-0">{ markdownText }</ReactMarkdown>
+    <ReactMarkdown className="px-7 py-6 w-[40rem] bg-white prose prose-h1:text-primary prose-h1:mb-6 prose-h3:font-bold prose-h3:mt-0 prose-a:no-underline prose-a:text-primary prose-a:font-semibold">{ markdownText }</ReactMarkdown>
 )}
 
 /** common article card */
