@@ -6,7 +6,6 @@ import Write from "./pages/Write";
 import Layout from "./pages/Layout";
 import Article from "./pages/Article";
 import "./index.scss";
-import Skirmish from "./Skirmish"; // TODO remove
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,9 +15,8 @@ root.render(
         <Routes>
 
           <Route path="write" element={<Write />} />
-          <Route path="sub" element={<Skirmish />} />
           <Route path=":term" element={<Article />} />
-          <Route path="" element={"404"} />
+          <Route path="" element={<Article />} />
         
         </Routes>
       </Layout>

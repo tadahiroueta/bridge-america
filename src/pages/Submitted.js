@@ -6,13 +6,13 @@ export default function Submitted({ markdownText, author, date }) {
         <ArticleStructure>
             <Markdown markdownText={ markdownText } />
             
-            <div className="text-lg space-y-6">
+            <div className="space-y-6 text-lg">
                 <Metadata author={ author } date={ date } />
                 <Card className="py-3">
                     <div>submitted emailed to</div>
-                    <div className="text-base text-primary text-right">tadahiroueta@gmail.com</div>
+                    <div className="text-base text-right text-primary">tadahiroueta@gmail.com</div>
                 </Card>
-                <Card className="text-3xl text-primary text-center font-semibold">THANK YOU!</Card>
+                <Card className="text-3xl font-semibold text-center text-primary">THANK YOU!</Card>
             </div>
         </ArticleStructure>
 )}

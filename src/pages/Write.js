@@ -1,61 +1,89 @@
 import { useEffect, useRef, useState } from "react";
 
-import { ArticleStructure, Card, Markdown, Metadata } from "../components";
-
-const writy = `
-# {title}
-
-This is markdown, a special text file type that lets you add styling through text alone. For example, to italicise text simply use ‘*’ around your text (*example*) or use ‘#’ to make headers like this:
-
-### {header}
-
-Don’t worry too much about this whole markdown stuff; just write clearly and concisely. This website was made to make information easily accessible, not to earn you a good English grade.
-
-One last thing: make sure to edit the placeholders at the top of this file so properly displays the name, date, title... 
-
-Thanks for help, by the way. You’re amazing.
- 
-Love, 
-
--L`;
-
-const writy2 = 
-`{name}
-mm/dd/yyyy
-` + writy;
+import { app, credentials } from "../mongo";
+import { addLinks } from "../utils";
+import { ArticleStructure, Card, Markdown } from "../components";
+import Submmited from "./Submitted";
 
 /** where people can submit articles */
 export default function Write() {
-    const reference = useRef(null);
-    const [markdownText, setMarkdownText] = useState(writy2);
+    const [markdown, setMarkdown] = useState("");
+    const [author, setAuthor] = useState("<Name Name>");
+    const [date, setDate] = useState("mm/dd/yyyy");
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    
+    const markdownReference = useRef();
+    const authorReference = useRef();
+    const dateReference = useRef();
 
     useEffect(() => {
-        updateHeight()
-    }, [])
+      const fetchContent = async term => {
+        const user = await app.logIn(credentials);
+        // get article and links in parallel
+        Promise.all([ user.functions.getArticle(term), user.functions.getTerms() ])
+          // implement links and set content
+          .then(([ article, terms ]) => 
+            setMarkdown(addLinks(article.markdown, terms.terms, term))
+          )
+          .catch(() => fetchContent("404"))
+      }
+      fetchContent("write")
+    }, []);
 
-    const updateHeight = () => {
-        reference.current.style.height = 'auto';
-        reference.current.style.height = `${reference.current.scrollHeight}px`;
+    useEffect(() => 
+      [ markdownReference, authorReference, dateReference ].forEach(updateHeight), 
+      [markdown, author, date]
+    );
+
+    const updateHeight = (reference, minHeight="auto") => {
+      reference.current.style.height = minHeight;
+      reference.current.style.height = `${reference.current.scrollHeight}px`;
     }
 
-    const handleChange = e => {
-        setMarkdownText(e.target.value)
-        updateHeight()
+    const handleClick = () => {
+      app.logIn(credentials)
+        .then(user => user.functions.uploadArticle(markdown, author, date))
+        .then(() => setIsSubmitted(true))
+        .catch(() => alert("Fuck."))
     }
 
-    const handleClick = () => {}
+    return isSubmitted ? <Submmited markdownText={ markdown } author={ author } date={ date } /> : (
+      <ArticleStructure className="space-x-12 w-min">
 
-    return (
-        <ArticleStructure className="w-min space-x-12">
-            <div className="space-y-7">
-                <Markdown markdownText={ writy } />
-                <Metadata author="{name}" date="04/10/2023" className="float-right" />
+        <div className="space-y-7">
+          <Markdown markdownText={ markdown } />
+          <Card className="float-right !py-5">
+
+            <div className="text-xl flex space-x-3 items-baseline">
+              <div>by</div> 
+              <textarea 
+                ref={ authorReference } 
+                value={ author } 
+                onChange={ e => { setAuthor(e.target.value); updateHeight(authorReference, "2.5rem"); }} 
+                className="w-64 bg-transparent text-3xl font-semibold text-primary resize-none focus:outline-none" 
+              />
             </div>
-            <div className="h-min space-y-5">
-                <textarea ref={reference} value={markdownText} onChange={handleChange} className="px-7 py-6 w-[40rem] text-gray-500" />
-                <button onClick={handleClick} className="float-right">
-                    <Card className="!px-4 w-min text-primary font-semibold text-3xl">Submit</Card>
-                </button>
-            </div>
-        </ArticleStructure>
+            <textarea 
+              ref={ dateReference } 
+              value={ date } 
+              onChange={ e => { setDate(e.target.value); updateHeight(dateReference); }} 
+              className="float-right text-right !h-7 resize-none focus:outline-none" 
+            />
+
+          </Card>
+        </div>
+
+        <div className="space-y-5 h-min">
+          <textarea 
+            ref={ markdownReference } 
+            value={ markdown } 
+            onChange={ e => { setMarkdown(e.target.value); updateHeight(markdownReference); }} 
+            className="px-7 py-6 w-[40rem] text-gray-500 resize-none focus:outline-none" 
+          />
+          <button onClick={ handleClick } className="float-right">
+            <Card className="!px-4 w-min text-primary font-semibold text-3xl">Submit</Card>
+          </button>
+        </div>
+
+      </ArticleStructure>
 )}
