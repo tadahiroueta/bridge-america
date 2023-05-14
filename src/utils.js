@@ -9,7 +9,7 @@ export function addLinks(markdown, links, title=null, admin=false) {
 
     for (const link of links) rest = rest.replace(new RegExp(
             // replace - for ' ' and check that it's not already linked
-            `(?<!\\[|\\-|\\/)\\b${link.replace(/-/i, ' ')}\\b(?!\\]|\\-)`, 'gi'
+            `(?<!\\[|\\-|\\/)\\b${link.replace(/-/g, ' ')}\\b(?!\\]|\\-)`, 'gi'
         ), `[$&](/${ (admin ? "admin/" : "") + link })`
     )
     return firstLine + "\n" + rest;
@@ -23,7 +23,7 @@ export function updateHeight(reference, minHeight="auto") {
 export function getTitle(markdown) {
     return markdown.split('\n')[0]
         .replace('# ', '')
-        .replace(' ', '-')
-        .replace('/', '-')
+        .replace(/ /g, '-')
+        .replace(/\//g, '-')
         .toLowerCase();
 }

@@ -10,7 +10,7 @@ export default function Admin() {
     const write = links => setMarkdown(addLinks(
         "### To approve:\n\n" + 
         links.sort((a, b) => .5 - Math.random()) // shuffle
-            .map(link => `* ${ link.replace(/-/i, ' ').toUpperCase() }`).join('\n'),
+            .map(link => `* ${ link.replace(/-/g, ' ').toUpperCase() }`).join('\n'),
         
         links, null, true
     ))

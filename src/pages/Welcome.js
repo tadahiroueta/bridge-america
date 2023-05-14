@@ -10,7 +10,7 @@ export default function Welcome() {
   const write = links => setMarkdown(addLinks(
     "# Welcome to America\n\n### Here are some things you might want to know:\n\n" + 
     links.sort((a, b) => .5 - Math.random()) // shuffle
-      .map(link => `* ${ link.replace(/-/i, ' ').toUpperCase() }`).join('\n')
+      .map(link => `* ${ link.replace(/-/g, ' ').toUpperCase() }`).join('\n')
   , links))
 
   useEffect(() => { (async () => { 
