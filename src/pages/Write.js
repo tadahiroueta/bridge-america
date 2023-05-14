@@ -22,7 +22,7 @@ function Submitted({ markdown, author, date }) { return (
 /** where people can submit articles */
 export default function Write() {
     const [ markdown, setMarkdown ] = useState("");
-    const [ author, setAuthor ] = useState("<Name Name>");
+    const [ author, setAuthor ] = useState("Name");
     const [ date, setDate ] = useState("mm/dd/yyyy");
     const [ isSubmitted, setIsSubmitted ] = useState(false);
     
