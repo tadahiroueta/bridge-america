@@ -49,7 +49,7 @@ export default function Approve() {
         .catch(() => navigate("/404"))
     }
     fetchContent("uploads", title)
-  }, [ title ]);
+  }, [ title, navigate ]);
 
   const handleClick = () => {
     const title = getTitle(markdown);
