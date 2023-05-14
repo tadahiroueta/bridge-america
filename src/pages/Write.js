@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 import { app, credentials } from "../mongo";
-import { addLinks } from "../utils";
-import { ArticleStructure, Card, Markdown, Metadata } from "../components";
+import { getTitle, updateHeight } from "../utils";
+import { ArticleStructure, Button, Card, EditorButton, LeftWrite, Markdown, MarkdownEditor, Metadata, WriteStructure } from "../components";
 
 function Submitted({ markdown, author, date }) { return (
   <ArticleStructure>
@@ -33,69 +33,55 @@ export default function Write() {
   useEffect(() => {
     updateHeight(authorReference, "1.25rem")
 
-    const fetchContent = async term => {
+    const fetchContent = async () => {
       const user = await app.logIn(credentials);
-      // get article and links in parallel
-      Promise.all([ user.functions.getArticle(term), user.functions.getTerms() ])
-        // implement links and set content
-        .then(([ article, terms ]) => {
-          setMarkdown(addLinks(article.markdown, terms.terms, term))
+      user.functions.findOne("articles", { title: "write" })
+        .then(article => {
+          setMarkdown(article.markdown)
           updateHeight(markdownReference)
-        })
-        .catch(() => fetchContent("404"))
-    }
-    fetchContent("write")
+    })}
+    fetchContent()
   }, []);
 
-  const updateHeight = (reference, minHeight="auto") => {
-    reference.current.style.height = minHeight;
-    reference.current.style.height = `${reference.current.scrollHeight}px`;
-  }
-
   const handleClick = () => {
+    const title = getTitle(markdown);
+
     app.logIn(credentials)
-      .then(user => user.functions.upload(markdown, author, date))
+      // run in parallel
+      .then(user => Promise.all([
+        // upload article privately
+        user.functions.insertOne("uploads", { title, markdown, author, date }),
+        // add to list
+        user.functions.findOne("titles", { collection: "uploads" })
+          .then(({ titles }) => user.functions.updateOne(
+            "titles", { collection: "uploads" }, { 
+              $set: { titles: [ ...titles, title ]}
+      }))]))
       .then(() => setIsSubmitted(true))
-      .catch(() => alert("Fuck."))
+      .catch((e) => console.log(e));
   }
 
-  return isSubmitted ? <Submitted markdownText={ markdown } author={ author } date={ date } /> : (
-    <ArticleStructure className="space-x-12 w-min">
+  return isSubmitted ? <Submitted markdown={ markdown } author={ author } date={ date } /> : (
+    <WriteStructure>
 
-      <div className="space-y-7">
-        <Markdown markdownText={ markdown } />
-        <Card className="float-right !py-5">
+      <LeftWrite
+        markdown={ markdown }
+        author={ author }
+        authorReference={ authorReference }
+        authorOnChange={ e => { setAuthor(e.target.value); updateHeight(authorReference); }}
+        date={ date }
+        dateReference={ dateReference }
+        dateOnChange={ e => { setDate(e.target.value); updateHeight(dateReference); }}
+      />
 
-          <div className="text-xl flex space-x-3 items-baseline">
-            <div>by</div> 
-            <textarea 
-              ref={ authorReference } 
-              value={ author } 
-              onChange={ e => { setAuthor(e.target.value); updateHeight(authorReference, "2.5rem"); }} 
-              className="w-64 bg-transparent text-3xl font-semibold text-primary resize-none focus:outline-none" 
-            />
-          </div>
-          <textarea 
-            ref={ dateReference } 
-            value={ date } 
-            onChange={ e => { setDate(e.target.value); updateHeight(dateReference); }} 
-            className="float-right text-right !h-7 resize-none focus:outline-none" 
-          />
-
-        </Card>
-      </div>
-
-      <div className="space-y-5 h-min">
-        <textarea 
-          ref={ markdownReference } 
-          value={ markdown } 
-          onChange={ e => { setMarkdown(e.target.value); updateHeight(markdownReference); }} 
-          className="px-7 py-6 w-[40rem] text-gray-500 resize-none focus:outline-none" 
+      <EditorButton>
+        <MarkdownEditor
+          markdown={ markdown }
+          markdownReference={ markdownReference }
+          markdownOnChange={ e => { setMarkdown(e.target.value); updateHeight(markdownReference); }}
         />
-        <button onClick={ handleClick } className="float-right">
-          <Card className="!px-4 w-min text-primary font-semibold text-3xl">Submit</Card>
-        </button>
-      </div>
+        <Button onClick={ handleClick }>Submit</Button>
+      </EditorButton>
 
-    </ArticleStructure>
+    </WriteStructure>
 )}
