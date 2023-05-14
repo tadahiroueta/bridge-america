@@ -56,7 +56,7 @@ export default function Write() {
 
     const handleClick = () => {
       app.logIn(credentials)
-        .then(user => user.functions.uploadArticle(markdown, author, date))
+        .then(user => user.functions.upload(markdown, author, date))
         .then(() => setIsSubmitted(true))
         .catch(() => alert("Fuck."))
     }
