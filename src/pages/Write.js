@@ -2,15 +2,29 @@ import { useEffect, useRef, useState } from "react";
 
 import { app, credentials } from "../mongo";
 import { addLinks } from "../utils";
-import { ArticleStructure, Card, Markdown } from "../components";
-import Submmited from "./Submitted";
+import { ArticleStructure, Card, Markdown, Metadata } from "../components";
+
+function Submitted({ markdown, author, date }) { return (
+  <ArticleStructure>
+      <Markdown markdownText={ markdown } />
+      
+      <div className="space-y-6 text-lg">
+          <Metadata author={ author } date={ date } />
+          <Card className="py-3">
+              <div>submitted emailed to</div>
+              <div className="text-base text-right text-primary">tadahiroueta@gmail.com</div>
+          </Card>
+          <Card className="text-3xl font-semibold text-center text-primary">THANK YOU!</Card>
+      </div>
+  </ArticleStructure>
+)}
 
 /** where people can submit articles */
 export default function Write() {
-    const [markdown, setMarkdown] = useState("");
-    const [author, setAuthor] = useState("<Name Name>");
-    const [date, setDate] = useState("mm/dd/yyyy");
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [ markdown, setMarkdown ] = useState("");
+    const [ author, setAuthor ] = useState("<Name Name>");
+    const [ date, setDate ] = useState("mm/dd/yyyy");
+    const [ isSubmitted, setIsSubmitted ] = useState(false);
     
     const markdownReference = useRef();
     const authorReference = useRef();
@@ -32,7 +46,7 @@ export default function Write() {
 
     useEffect(() => 
       [ markdownReference, authorReference, dateReference ].forEach(updateHeight), 
-      [markdown, author, date]
+      [ markdown, author, date ]
     );
 
     const updateHeight = (reference, minHeight="auto") => {
@@ -47,7 +61,7 @@ export default function Write() {
         .catch(() => alert("Fuck."))
     }
 
-    return isSubmitted ? <Submmited markdownText={ markdown } author={ author } date={ date } /> : (
+    return isSubmitted ? <Submitted markdownText={ markdown } author={ author } date={ date } /> : (
       <ArticleStructure className="space-x-12 w-min">
 
         <div className="space-y-7">

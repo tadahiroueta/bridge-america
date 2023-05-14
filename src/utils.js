@@ -1,4 +1,4 @@
-export function addLinks(markdown, links, term) {
+export function addLinks(markdown, links, term=null) {
     // skip the title
     const lines = markdown.split('\n');
     const firstLine = lines[0];

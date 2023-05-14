@@ -6,13 +6,11 @@ function Navbar() { return (
 
 			<div className="flex items-center space-x-16">
 				{/* logo */}
-				<Link to="" className="pointer-events-none ">
-					<img src="logo-white.png" alt="BA" className="h-12" />
-				</Link>
+				<Link to=""><img src="logo-white.png" alt="BA" className="h-12" /></Link>
 
 				{/* links */}
 				<div className="flex space-x-16 text-xl font-light">
-					<Link to="" className="pointer-events-none text-slate-300">Welcome</Link>
+					<Link to="">Welcome</Link>
 					<Link to="about" className="pointer-events-none text-slate-300">About</Link>
 					<Link to="write">Write</Link>
 				</div>
