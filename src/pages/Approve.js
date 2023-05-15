@@ -5,14 +5,17 @@ import { app, credentials } from "../mongo"
 import { getTitle, updateHeight } from "../utils"
 import { ArticleStructure, Button, EditorButton, LeftWrite, Markdown, MarkdownEditor, Metadata, Minor, WriteStructure } from "../components"
 
-function Approved({ markdown, author, date }) {
+function Reviewed({ markdown, author, date, review }) {
   return (
     <ArticleStructure>
       <Markdown markdownText={ markdown } />
       
       <div className="space-y-6 text-lg">
         <Metadata author={ author } date={ date } />
-        <Minor>Approved</Minor>
+        { review === "approved" ? 
+          <Minor className="text-primary">Approved</Minor> : 
+          <Minor className="text-red-500">Rejected</Minor> 
+        }
       </div>
     </ArticleStructure>
 )}
@@ -25,7 +28,7 @@ export default function Approve() {
   const [ markdown, setMarkdown ] = useState()
   const [ author, setAuthor ] = useState()
   const [ date, setDate ] = useState()
-  const [ isApproved, setIsApproved ] = useState(false)
+  const [ review, setReview ] = useState("reviewing")
 
   const markdownReference = useRef()
   const authorReference = useRef()
@@ -51,7 +54,21 @@ export default function Approve() {
   useEffect(() => updateHeight(authorReference, "1.25rem"), [ author ])
   useEffect(() => updateHeight(dateReference), [ date ])
 
-  const handleClick = () => {
+  const deleteUpload = user => Promise.all([
+    // delete private upload
+    user.functions.deleteOne("uploads", { title }),
+    // delete from list
+    user.functions.findOne("titles", { collection: "uploads" })
+      .then(({ titles }) => user.functions.updateOne(
+        "titles", { collection: "uploads" }, { 
+          $set: { titles: titles.filter(t => t !== title)
+  }}))]);
+
+  const handleReject = () => app.logIn(credentials)
+    .then(deleteUpload)
+    .then(() => setReview("rejected"));
+
+  const handleApprove = () => {
     const title = getTitle(markdown);
 
     app.logIn(credentials)
@@ -68,21 +85,12 @@ export default function Approve() {
         }))])
         return user // use again
       })
-      // delete
-      .then(user => Promise.all([
-        // delete private upload
-        user.functions.deleteOne("uploads", { title }),
-        // delete from list
-        user.functions.findOne("titles", { collection: "uploads" })
-          .then(({ titles }) => user.functions.updateOne(
-            "titles", { collection: "uploads" }, { 
-              $set: { titles: titles.filter(t => t !== title)
-      }}))]))
-      .then(() => setIsApproved(true))
+      .then(deleteUpload)
+      .then(() => setReview("approved"))
       .catch(() => alert("Fuck."))
   }
 
-  return isApproved ? <Approved markdown={ markdown } author={ author } date={ date } /> : (
+  return review !== "reviewing" ? <Reviewed markdown={ markdown } author={ author } date={ date } review={ review } /> : (
     <WriteStructure>
 
       <LeftWrite
@@ -101,7 +109,10 @@ export default function Approve() {
           markdownReference={ markdownReference }
           markdownOnChange={ e => setMarkdown(e.target.value) }
         />
-        <Button onClick={ handleClick }>Approve</Button>
+        <div className="flex justify-end space-x-7">
+          <Button onClick={ handleReject } className="text-red-500">Reject</Button>
+          <Button onClick={ handleApprove } className="text-primary">Approve</Button>
+        </div>
       </EditorButton>
 
     </WriteStructure>

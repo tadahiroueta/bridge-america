@@ -54,8 +54,8 @@ export function Metadata({ className, author, date }) { return (
 )}
 
 /** minor sentence card */
-export function Minor({ children }) { return (
-    <Card className="text-3xl font-semibold text-center text-primary">{ children }</Card>
+export function Minor({ className, children }) { return (
+    <Card className={ "text-3xl font-semibold text-center " + className }>{ children }</Card>
 )}
 
 /** markdown and editable metadata */
@@ -94,8 +94,8 @@ export function MarkdownEditor({ markdown, markdownReference, markdownOnChange }
   />
 }
 
-export function Button({ onClick, children }) { return (
-  <button onClick={ onClick } className="float-right">
-    <Card className="!px-4 w-min text-primary font-semibold text-3xl">{ children }</Card>
+export function Button({ onClick, className, children }) { return (
+  <button onClick={ onClick } className={ "float-right " + className }>
+    <Card className="!px-4 w-min font-semibold text-3xl">{ children }</Card>
   </button>
 )}
