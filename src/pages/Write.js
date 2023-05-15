@@ -4,12 +4,14 @@ import { app, credentials } from "../mongo";
 import { getTitle, updateHeight } from "../utils";
 import { ArticleStructure, Button, Card, EditorButton, LeftWrite, Markdown, MarkdownEditor, Metadata, WriteStructure } from "../components";
 
-function Submitted({ markdown, author, date }) { return (
+const today = new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+
+function Submitted({ markdown, author }) { return (
   <ArticleStructure>
     <Markdown markdownText={ markdown } />
     
     <div className="space-y-6 text-lg">
-      <Metadata author={ author } date={ date } />
+      <Metadata author={ author } date={ today } />
       <Card className="py-3">
         <div>submitted emailed to</div>
         <div className="text-base text-right text-primary">tadahiroueta@gmail.com</div>
@@ -23,7 +25,6 @@ function Submitted({ markdown, author, date }) { return (
 export default function Write() {
   const [ markdown, setMarkdown ] = useState("");
   const [ author, setAuthor ] = useState("Name");
-  const [ date, setDate ] = useState("mm/dd/yyyy");
   const [ isSubmitted, setIsSubmitted ] = useState(false);
   
   const markdownReference = useRef();
@@ -43,7 +44,6 @@ export default function Write() {
 
   useEffect(() => updateHeight(markdownReference), [ markdown ])
   useEffect(() => updateHeight(authorReference, "1.25rem"), [ author ])
-  useEffect(() => updateHeight(dateReference), [ date ])
 
   const handleClick = () => {
     const title = getTitle(markdown);
@@ -52,7 +52,7 @@ export default function Write() {
       // run in parallel
       .then(user => Promise.all([
         // upload article privately
-        user.functions.insertOne("uploads", { title, markdown, author, date }),
+        user.functions.insertOne("uploads", { title, markdown, author, date: today }),
         // add to list
         user.functions.findOne("titles", { collection: "uploads" })
           .then(({ titles }) => user.functions.updateOne(
@@ -63,7 +63,7 @@ export default function Write() {
       .catch((e) => console.log(e));
   }
 
-  return isSubmitted ? <Submitted markdown={ markdown } author={ author } date={ date } /> : (
+  return isSubmitted ? <Submitted markdown={ markdown } author={ author } /> : (
     <WriteStructure>
 
       <LeftWrite
@@ -71,9 +71,8 @@ export default function Write() {
         author={ author }
         authorReference={ authorReference }
         authorOnChange={ e => setAuthor(e.target.value) }
-        date={ date }
+        date={ today }
         dateReference={ dateReference }
-        dateOnChange={ e => setDate(e.target.value) }
       />
 
       <EditorButton>

@@ -77,6 +77,7 @@ export function LeftWrite({ markdown, author, authorReference, authorOnChange, d
         ref={ dateReference } 
         value={ date } 
         onChange={ dateOnChange } 
+        readOnly={ !dateOnChange }
         className="float-right text-right !h-7 resize-none focus:outline-none" 
       />
 
