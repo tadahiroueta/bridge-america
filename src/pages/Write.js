@@ -36,12 +36,14 @@ export default function Write() {
     const fetchContent = async () => {
       const user = await app.logIn(credentials);
       user.functions.findOne("articles", { title: "write" })
-        .then(article => {
-          setMarkdown(article.markdown)
-          updateHeight(markdownReference)
-    })}
+        .then(article => setMarkdown(article.markdown))
+    }
     fetchContent()
   }, []);
+
+  useEffect(() => updateHeight(markdownReference), [ markdown ])
+  useEffect(() => updateHeight(authorReference, "1.25rem"), [ author ])
+  useEffect(() => updateHeight(dateReference), [ date ])
 
   const handleClick = () => {
     const title = getTitle(markdown);
@@ -68,17 +70,17 @@ export default function Write() {
         markdown={ markdown }
         author={ author }
         authorReference={ authorReference }
-        authorOnChange={ e => { setAuthor(e.target.value); updateHeight(authorReference); }}
+        authorOnChange={ e => setAuthor(e.target.value) }
         date={ date }
         dateReference={ dateReference }
-        dateOnChange={ e => { setDate(e.target.value); updateHeight(dateReference); }}
+        dateOnChange={ e => setDate(e.target.value) }
       />
 
       <EditorButton>
         <MarkdownEditor
           markdown={ markdown }
           markdownReference={ markdownReference }
-          markdownOnChange={ e => { setMarkdown(e.target.value); updateHeight(markdownReference); }}
+          markdownOnChange={ e => setMarkdown(e.target.value) }
         />
         <Button onClick={ handleClick }>Submit</Button>
       </EditorButton>

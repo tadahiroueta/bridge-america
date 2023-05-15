@@ -41,15 +41,15 @@ export default function Approve() {
           setMarkdown(article.markdown)
           setAuthor(article.author)
           setDate(article.date)
-          
-          updateHeight(markdownReference)
-          updateHeight(authorReference, "1.25rem")
-          updateHeight(dateReference)
         })
         .catch(() => navigate("/404"))
     }
     fetchContent("uploads", title)
   }, [ title, navigate ]);
+
+  useEffect(() => updateHeight(markdownReference), [ markdown ])
+  useEffect(() => updateHeight(authorReference, "1.25rem"), [ author ])
+  useEffect(() => updateHeight(dateReference), [ date ])
 
   const handleClick = () => {
     const title = getTitle(markdown);
@@ -89,17 +89,17 @@ export default function Approve() {
         markdown={ markdown }
         author={ author }
         authorReference={ authorReference }
-        authorOnChange={ e => { setAuthor(e.target.value); updateHeight(authorReference); }}
+        authorOnChange={ e => setAuthor(e.target.value) }
         date={ date }
         dateReference={ dateReference }
-        dateOnChange={ e => { setDate(e.target.value); updateHeight(dateReference); }}
+        dateOnChange={ e => setDate(e.target.value) }
       />
 
       <EditorButton>
         <MarkdownEditor
           markdown={ markdown }
           markdownReference={ markdownReference }
-          markdownOnChange={ e => { setMarkdown(e.target.value); updateHeight(markdownReference); }}
+          markdownOnChange={ e => setMarkdown(e.target.value) }
         />
         <Button onClick={ handleClick }>Approve</Button>
       </EditorButton>
