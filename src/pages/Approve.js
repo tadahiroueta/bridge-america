@@ -3,21 +3,23 @@ import { useParams, useNavigate } from "react-router-dom"
 
 import { app, credentials } from "../mongo"
 import { getTitle, updateHeight } from "../utils"
-import { ArticleStructure, Button, EditorButton, LeftWrite, Markdown, MarkdownEditor, Metadata, Minor, WriteStructure } from "../components"
+import { ArticleStructure, Button, EditorButton, LeftWrite, Markdown, MarkdownEditor, Metadata, Minor, SingleStructure, WriteStructure } from "../components"
 
 function Reviewed({ markdown, author, date, review }) {
   return (
-    <ArticleStructure>
-      <Markdown markdownText={ markdown } />
-      
-      <div className="space-y-6 text-lg">
-        <Metadata author={ author } date={ date } />
-        { review === "approved" ? 
-          <Minor className="text-primary">Approved</Minor> : 
-          <Minor className="text-red-500">Rejected</Minor> 
-        }
-      </div>
-    </ArticleStructure>
+    <SingleStructure>
+      <ArticleStructure>
+        <Markdown markdownText={ markdown } />
+        
+        <div className="space-y-6 text-lg">
+          <Metadata author={ author } date={ date } />
+          { review === "approved" ? 
+            <Minor className="text-primary">Approved</Minor> : 
+            <Minor className="text-red-500">Rejected</Minor> 
+          }
+        </div>
+      </ArticleStructure>
+    </SingleStructure>
 )}
 
 
@@ -51,7 +53,7 @@ export default function Approve() {
   }, [ title, navigate ]);
 
   useEffect(() => updateHeight(markdownReference), [ markdown ])
-  useEffect(() => updateHeight(authorReference, "1.25rem"), [ author ])
+  useEffect(() => updateHeight(authorReference), [ author ])
   useEffect(() => updateHeight(dateReference), [ date ])
 
   const deleteUpload = user => Promise.all([

@@ -2,23 +2,25 @@ import { useEffect, useRef, useState } from "react";
 
 import { app, credentials } from "../mongo";
 import { getTitle, updateHeight } from "../utils";
-import { ArticleStructure, Button, Card, EditorButton, LeftWrite, Markdown, MarkdownEditor, Metadata, WriteStructure } from "../components";
+import { ArticleStructure, Button, Card, EditorButton, LeftWrite, Markdown, MarkdownEditor, Metadata, SingleStructure, WriteStructure } from "../components";
 
 const today = new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
 
 function Submitted({ markdown, author }) { return (
-  <ArticleStructure>
-    <Markdown markdownText={ markdown } />
-    
-    <div className="space-y-6 text-lg">
-      <Metadata author={ author } date={ today } />
-      <Card className="py-3">
-        <div>submitted emailed to</div>
-        <div className="text-base text-right text-primary">tadahiroueta@gmail.com</div>
-      </Card>
-      <Card className="text-3xl font-semibold text-center text-primary">THANK YOU!</Card>
-    </div>
-  </ArticleStructure>
+  <SingleStructure>
+    <ArticleStructure>
+      <Markdown markdownText={ markdown } />
+      
+      <div className="space-y-6 text-lg">
+        <Metadata author={ author } date={ today } />
+        <Card className="py-3">
+          <div>submitted emailed to</div>
+          <div className="text-base text-right text-primary">tadahiroueta@gmail.com</div>
+        </Card>
+        <Card className="text-3xl font-semibold text-center text-primary">THANK YOU!</Card>
+      </div>
+    </ArticleStructure>
+  </SingleStructure>
 )}
 
 /** where people can submit articles */
@@ -32,7 +34,7 @@ export default function Write() {
   const dateReference = useRef();
 
   useEffect(() => {
-    updateHeight(authorReference, "1.25rem")
+    updateHeight(authorReference)
 
     const fetchContent = async () => {
       const user = await app.logIn(credentials);
@@ -43,7 +45,7 @@ export default function Write() {
   }, []);
 
   useEffect(() => updateHeight(markdownReference), [ markdown ])
-  useEffect(() => updateHeight(authorReference, "1.25rem"), [ author ])
+  useEffect(() => updateHeight(authorReference), [ author ])
 
   const handleClick = () => {
     const title = getTitle(markdown);

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { app, credentials } from "../mongo";
 import { addLinks } from "../utils";
-import { ListArticles } from "../components";
+import { ListArticles, SingleStructure } from "../components";
 
 export default function Welcome() {
   const [ markdown, setMarkdown ] = useState(" ");
@@ -23,5 +23,8 @@ export default function Welcome() {
       .then(titles => write(titles.titles))
   })()}, [])
   
-  return <ListArticles markdown={ markdown } />;
-}
+  return (
+    <SingleStructure>
+      <ListArticles markdown={ markdown } />
+    </SingleStructure>
+)}

@@ -1,22 +1,30 @@
 import ReactMarkdown from 'react-markdown'
 
-/** 
- * splits the screen in two columns
- * (classname applies to inner div)
- */
-export function ArticleStructure({ className, children }) { return (
+export function SingleStructure({ children }) { return (
   <div className="flex justify-center">
-    <div className={ "w-2/3 flex justify-between " + className }>
+    <div className='w-2/3 flex flex-col space-y-48'>
       { children }
     </div>
   </div>
 )}
 
+/** 
+ * splits the screen in two columns
+ * (classname applies to inner div)
+ */
+export function ArticleStructure({ className, children }) { return (
+  <div className={ "flex justify-between " + className }>
+    { children }
+  </div>
+)}
+
 /** space for two articles */
 export function WriteStructure({ children }) { return (
-  <ArticleStructure className="space-x-12 w-min">
-    { children }
-  </ArticleStructure>
+  <div className="flex justify-center">
+    <ArticleStructure className="space-x-12 w-min">
+      { children }
+    </ArticleStructure>
+  </div>
 )}
 
 /** space between markdown editor and button */
@@ -90,7 +98,7 @@ export function MarkdownEditor({ markdown, markdownReference, markdownOnChange }
     ref={ markdownReference } 
     value={ markdown } 
     onChange={ markdownOnChange } 
-    className="px-7 py-6 w-[40rem] text-gray-500 resize-none focus:outline-none" 
+    className="px-7 py-6 w-[40rem] text-typing resize-none focus:outline-none" 
   />
 }
 

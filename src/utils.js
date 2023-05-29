@@ -15,8 +15,10 @@ export function addLinks(markdown, links, title=null, admin=false) {
     return firstLine + "\n" + rest;
 }
 
-export function updateHeight(reference, minHeight="auto") {
-    reference.current.style.height = minHeight;
+export function updateHeight(reference) {
+    if (!reference.current) return;
+    
+    reference.current.style.height = "0";
     reference.current.style.height = `${reference.current.scrollHeight}px`;
 }
 
