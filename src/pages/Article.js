@@ -9,27 +9,6 @@ import { addLinks, app, credentials, updateHeight } from '../utils';
 import { countries } from '../data';
 import { ArticleStructure, Markdown, Metadata, SingleStructure } from '../components';
 
-// TODO remove
-const comments = [
-  {
-    _id: "0",
-    country: "us",
-    grade: "Senior",
-    school: "Lebanon Trail High School",
-    message: "The hardest choices require the strongest wills",
-    likes: 12,
-    replies: [
-      {
-        _id: "1",
-        parentId: "0",
-        country: "in",
-        grade: "Parent",
-        school: "Reedy High School",
-        message: "Shut up",
-        likes: 4,
-        replies: []
-}]}]
-
 const iconSize = "h-6 w-6";
 
 // sort by number of likes
@@ -220,8 +199,9 @@ export default function Article() {
   const { title } = useParams()
 
   const [content, setContent] = useState({})
+  const [ comments, setComments ] = useState([]) // TODO fix spacing like [ this ]
 
-  // initial fetch
+  // initial fetch - article
   useEffect(() => { 
     const fetchContent = async title => {
       const user = await app.logIn(credentials);
@@ -241,6 +221,14 @@ export default function Article() {
     }
     fetchContent(title)
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // initial fetch - comments
+  useEffect(() => {
+    (async title => {
+      const user = await app.logIn(credentials);
+      user.functions.find("comments", { article: title }).then(setComments)
+    })()
   }, [])
 
   // hide component if 404
