@@ -16,13 +16,13 @@ const likeSort = (a, b) => a.likes < b.likes ? 1 : -1;
 
 /** write a comment without account */
 function AddComment() {
-  const [country, setCountry] = useState();
-  const [grade, setGrade] = useState("");
-  const [school, setSchool] = useState();
-  const [message, setMessage] = useState();
+  const [ country, setCountry ] = useState();
+  const [ grade, setGrade ] = useState("");
+  const [ school, setSchool ] = useState();
+  const [ message, setMessage ] = useState();
 
   // helper for school input 
-  const [previousSchool, setPreviousSchool] = useState();
+  const [ previousSchool, setPreviousSchool ] = useState();
 
   const schoolRef = useRef();
   const messageRef = useRef();
@@ -140,7 +140,7 @@ function AddComment() {
 
 /** comment, init? */
 function Comment({ comment, className }) { 
-  const [isLiked, setIsLiked] = useState();
+  const [ isLiked, setIsLiked ] = useState();
   
   return (
     <div className={ "flex flex-col space-y-6 " + className }>
@@ -198,8 +198,8 @@ function Comment({ comment, className }) {
 export default function Article() {
   const { title } = useParams()
 
-  const [content, setContent] = useState({})
-  const [ comments, setComments ] = useState([]) // TODO fix spacing like [ this ]
+  const [ content, setContent ] = useState({})
+  const [ comments, setComments ] = useState([])
 
   // initial fetch - article
   useEffect(() => { 
