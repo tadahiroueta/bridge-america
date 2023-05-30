@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
-import { app, credentials } from "../mongo"
-import { getTitle, updateHeight } from "../utils"
-import { ArticleStructure, Button, EditorButton, LeftWrite, Markdown, MarkdownEditor, Metadata, Minor, SingleStructure, WriteStructure } from "../components"
+import { app, credentials, getTitle, updateHeight } from "../utils"
+import { ArticleStructure, CardButton, RightWriteStructure, LeftWrite, Markdown, MarkdownEditor, Metadata, Minor, SingleStructure, WriteStructure } from "../components"
 
+/** page after reviewing submission */
 function Reviewed({ markdown, author, date, review }) {
   return (
     <SingleStructure>
       <ArticleStructure>
+
+        {/* left side */}
         <Markdown markdownText={ markdown } />
         
+        {/* right side */}
         <div className="space-y-6 text-lg">
           <Metadata author={ author } date={ date } />
           { review === "approved" ? 
@@ -18,11 +21,13 @@ function Reviewed({ markdown, author, date, review }) {
             <Minor className="text-red-500">Rejected</Minor> 
           }
         </div>
+
       </ArticleStructure>
     </SingleStructure>
 )}
 
 
+/** edit, approve, or reject article submission */
 export default function Approve() {
   const { title } = useParams()
   const navigate = useNavigate()
@@ -36,6 +41,7 @@ export default function Approve() {
   const authorReference = useRef()
   const dateReference = useRef()
   
+  // initial fetch
   useEffect(() => {
     const fetchContent = async (collection, title) => {
       const user = await app.logIn(credentials);
@@ -50,7 +56,8 @@ export default function Approve() {
         .catch(() => navigate("/404"))
     }
     fetchContent("uploads", title)
-  }, [ title, navigate ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => updateHeight(markdownReference), [ markdown ])
   useEffect(() => updateHeight(authorReference), [ author ])
@@ -92,30 +99,26 @@ export default function Approve() {
       .catch(() => alert("Fuck."))
   }
 
-  return review !== "reviewing" ? <Reviewed markdown={ markdown } author={ author } date={ date } review={ review } /> : (
+  return review !== "reviewing" ? // after reviewing
+    <Reviewed markdown={ markdown } author={ author } date={ date } review={ review } /> : (
+    
     <WriteStructure>
 
-      <LeftWrite
-        markdown={ markdown }
-        author={ author }
-        authorReference={ authorReference }
-        authorOnChange={ e => setAuthor(e.target.value) }
-        date={ date }
-        dateReference={ dateReference }
-        dateOnChange={ e => setDate(e.target.value) }
-      />
+      <LeftWrite markdown={ markdown } author={ author } authorReference={ authorReference }
+        authorOnChange={ e => setAuthor(e.target.value) } date={ date }
+        dateReference={ dateReference } dateOnChange={ e => setDate(e.target.value) } />
 
-      <EditorButton>
-        <MarkdownEditor
-          markdown={ markdown }
-          markdownReference={ markdownReference }
-          markdownOnChange={ e => setMarkdown(e.target.value) }
-        />
+      <RightWriteStructure>
+
+        <MarkdownEditor markdown={ markdown } markdownReference={ markdownReference }
+          markdownOnChange={ e => setMarkdown(e.target.value) } />
+
         <div className="flex justify-end space-x-7">
-          <Button onClick={ handleReject } className="text-red-500">Reject</Button>
-          <Button onClick={ handleApprove } className="text-primary">Approve</Button>
+          <CardButton onClick={ handleReject } className="text-red-500">Reject</CardButton>
+          <CardButton onClick={ handleApprove } className="text-primary">Approve</CardButton>
         </div>
-      </EditorButton>
+
+      </RightWriteStructure>
 
     </WriteStructure>
 )}

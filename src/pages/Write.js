@@ -1,24 +1,33 @@
 import { useEffect, useRef, useState } from "react";
 
-import { app, credentials } from "../mongo";
-import { getTitle, updateHeight } from "../utils";
-import { ArticleStructure, Button, Card, EditorButton, LeftWrite, Markdown, MarkdownEditor, Metadata, SingleStructure, WriteStructure } from "../components";
+import { app, credentials, getTitle, updateHeight } from "../utils";
+import { ArticleStructure, CardButton, Card, RightWriteStructure, LeftWrite, Markdown, MarkdownEditor, Metadata, SingleStructure, WriteStructure } from "../components";
 
-const today = new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+const today = new Date().toLocaleDateString("en-US",
+  { month: "2-digit", day: "2-digit", year: "numeric" });
 
+/** thank you message for writers */
 function Submitted({ markdown, author }) { return (
   <SingleStructure>
     <ArticleStructure>
+
+      {/* left side */}
       <Markdown markdownText={ markdown } />
       
+      {/* right side */}
       <div className="space-y-6 text-lg">
+
         <Metadata author={ author } date={ today } />
+
         <Card className="py-3">
           <div>submitted emailed to</div>
           <div className="text-base text-right text-primary">tadahiroueta@gmail.com</div>
         </Card>
+
         <Card className="text-3xl font-semibold text-center text-primary">THANK YOU!</Card>
+
       </div>
+
     </ArticleStructure>
   </SingleStructure>
 )}
@@ -33,6 +42,7 @@ export default function Write() {
   const authorReference = useRef();
   const dateReference = useRef();
 
+  // initial fetch
   useEffect(() => {
     updateHeight(authorReference)
 
@@ -47,7 +57,7 @@ export default function Write() {
   useEffect(() => updateHeight(markdownReference), [ markdown ])
   useEffect(() => updateHeight(authorReference), [ author ])
 
-  const handleClick = () => {
+  const handleSubmit = () => {
     const title = getTitle(markdown);
 
     app.logIn(credentials)
@@ -65,26 +75,19 @@ export default function Write() {
       .catch((e) => console.log(e));
   }
 
+  // show thank you message
   return isSubmitted ? <Submitted markdown={ markdown } author={ author } /> : (
     <WriteStructure>
 
-      <LeftWrite
-        markdown={ markdown }
-        author={ author }
-        authorReference={ authorReference }
-        authorOnChange={ e => setAuthor(e.target.value) }
-        date={ today }
-        dateReference={ dateReference }
-      />
+      <LeftWrite markdown={ markdown } author={ author } authorReference={ authorReference }
+        authorOnChange={ e => setAuthor(e.target.value) } date={ today }
+        dateReference={ dateReference } />
 
-      <EditorButton>
-        <MarkdownEditor
-          markdown={ markdown }
-          markdownReference={ markdownReference }
-          markdownOnChange={ e => setMarkdown(e.target.value) }
-        />
-        <Button onClick={ handleClick } className="text-primary">Submit</Button>
-      </EditorButton>
+      <RightWriteStructure>
+        <MarkdownEditor markdown={ markdown } markdownReference={ markdownReference }
+          markdownOnChange={ e => setMarkdown(e.target.value) } />
+        <CardButton onClick={ handleSubmit } className="text-primary">Submit</CardButton>
+      </RightWriteStructure>
 
     </WriteStructure>
 )}

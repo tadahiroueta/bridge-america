@@ -1,5 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 
+/** A single centered column taking most of the page */
 export function SingleStructure({ children }) { return (
   <div className="flex justify-center">
     <div className='w-2/3 flex flex-col space-y-48'>
@@ -28,7 +29,7 @@ export function WriteStructure({ children }) { return (
 )}
 
 /** space between markdown editor and button */
-export function EditorButton({ children }) { return (
+export function RightWriteStructure({ children }) { return (
   <div className="space-y-5 h-min">
     { children }
   </div>
@@ -43,7 +44,9 @@ export function Card({ className, children }) { return (
 
 /** converts markdown to styled html */
 export function Markdown({ markdownText }) { return (
-    <ReactMarkdown className="px-7 py-6 w-[40rem] bg-white prose prose-h1:text-primary prose-h1:mb-6 prose-h3:font-bold prose-h3:mt-0 prose-a:no-underline prose-a:text-primary prose-a:font-semibold prose-img:mt-0">{ markdownText }</ReactMarkdown>
+    <ReactMarkdown className="px-7 py-6 w-[40rem] bg-white prose prose-h1:text-primary 
+    prose-h1:mb-6 prose-h3:font-bold prose-h3:mt-0 prose-a:no-underline prose-a:text-primary 
+    prose-a:font-semibold prose-img:mt-0">{ markdownText }</ReactMarkdown>
 )}
 
 /** list articles */
@@ -56,53 +59,49 @@ export function ListArticles({ markdown }) { return (
 /** common article card */
 export function Metadata({ className, author, date }) { return (
   <Card className={ "!py-5 " + className }>
-    <div className="text-xl">by <span className="text-3xl font-semibold text-primary">{ author }</span></div>
+    <div className="text-xl">
+      <span>by </span><span className="text-3xl font-semibold text-primary">{ author }</span>
+    </div>
     <div className="flex justify-end text-lg">{ date }</div>
   </Card>
 )}
 
 /** minor sentence card */
 export function Minor({ className, children }) { return (
-    <Card className={ "text-3xl font-semibold text-center " + className }>{ children }</Card>
-)}
+  <Card className={ "text-3xl font-semibold text-center " + className }>{ children }</Card>)}
 
 /** markdown and editable metadata */
-export function LeftWrite({ markdown, author, authorReference, authorOnChange, date, dateReference, dateOnChange }) { return (
-  <div className="space-y-7">
-    <Markdown markdownText={ markdown } />
-    <Card className="float-right !py-5">
+export function LeftWrite({ markdown, author, authorReference, authorOnChange, date, 
+  dateReference, dateOnChange }) { 
+  return (
+    <div className="space-y-7">
+      <Markdown markdownText={ markdown } />
+      <Card className="float-right !py-5">
 
-      <div className="text-xl flex space-x-3 items-baseline">
-        <div>by</div> 
-        <textarea 
-          ref={ authorReference } 
-          value={ author } 
-          onChange={ authorOnChange } 
-          className="w-64 bg-transparent text-3xl font-semibold text-primary resize-none focus:outline-none" 
+        <div className="text-xl flex space-x-3 items-baseline">
+          <div>by</div> 
+          <textarea ref={ authorReference } value={ author } onChange={ authorOnChange } 
+            className="w-64 bg-transparent text-3xl font-semibold text-primary resize-none 
+            focus:outline-none" />
+        </div>
+
+        <textarea ref={ dateReference } value={ date } onChange={ dateOnChange } 
+          readOnly={ !dateOnChange }
+          className="float-right text-right !h-7 resize-none focus:outline-none" 
         />
-      </div>
-      <textarea 
-        ref={ dateReference } 
-        value={ date } 
-        onChange={ dateOnChange } 
-        readOnly={ !dateOnChange }
-        className="float-right text-right !h-7 resize-none focus:outline-none" 
-      />
 
-    </Card>
-  </div>
+      </Card>
+    </div>
 )}
 
+/** where the user can write for the markdown */
 export function MarkdownEditor({ markdown, markdownReference, markdownOnChange }) { 
-  return <textarea 
-    ref={ markdownReference } 
-    value={ markdown } 
-    onChange={ markdownOnChange } 
-    className="px-7 py-6 w-[40rem] text-typing resize-none focus:outline-none" 
-  />
+  return <textarea ref={ markdownReference } value={ markdown } onChange={ markdownOnChange } 
+    className="px-7 py-6 w-[40rem] text-typing resize-none focus:outline-none" />
 }
 
-export function Button({ onClick, className, children }) { return (
+/** */
+export function CardButton({ onClick, className, children }) { return (
   <button onClick={ onClick } className={ "float-right " + className }>
     <Card className="!px-4 w-min font-semibold text-3xl">{ children }</Card>
   </button>

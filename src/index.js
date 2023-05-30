@@ -15,14 +15,17 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <StrictMode> {/* avoid build errors */}
     <BrowserRouter>
-      <Layout> {/* always on */}
+      <Layout> {/* applied on all pages */}
         <Routes>
 
           <Route path="" element={ <Welcome /> } />
           <Route path="write" element={ <Write /> } />
-          <Route path="admin" element={ <Admin /> } />
+
+          {/* unbeknown to the public */}
+          <Route path="admin" element={ <Admin /> } /> 
           <Route path="skirmish" element={ <Skirmish /> } />
           <Route path="admin/:title" element={ <Approve /> } />
+          
           <Route path=":title" element={ <Article /> } />
         
         </Routes>

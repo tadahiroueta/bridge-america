@@ -1,3 +1,11 @@
+import { App, Credentials } from 'realm-web'
+
+const REALM_APP_ID = "application-1-rpvhe";
+
+export const app = new App({ id: REALM_APP_ID });
+
+export const credentials = Credentials.anonymous();
+
 export function addLinks(markdown, links, title=null, admin=false) {
     // skip the title
     const lines = markdown.split('\n');

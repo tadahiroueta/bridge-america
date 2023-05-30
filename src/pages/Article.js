@@ -5,11 +5,11 @@ import { HandThumbUpIcon, HandThumbDownIcon, FlagIcon } from "@heroicons/react/2
 import { HandThumbUpIcon as HandThumbUpIconSolid, HandThumbDownIcon as HandThumbDownIconSolid } 
   from "@heroicons/react/24/solid";
 
-import { app, credentials } from '../mongo';
-import { addLinks, updateHeight } from '../utils';
+import { addLinks, app, credentials, updateHeight } from '../utils';
+import { countries } from '../data';
 import { ArticleStructure, Markdown, Metadata, SingleStructure } from '../components';
-import countries from '../data/countries.json';
 
+// TODO remove
 const comments = [
   {
     _id: "0",
@@ -32,33 +32,46 @@ const comments = [
 
 const iconSize = "h-6 w-6";
 
+// sort by number of likes
 const likeSort = (a, b) => a.likes < b.likes ? 1 : -1;
 
+/** write a comment without account */
 function AddComment() {
   const [country, setCountry] = useState();
   const [grade, setGrade] = useState("");
   const [school, setSchool] = useState();
   const [message, setMessage] = useState();
 
+  // helper for school input 
   const [previousSchool, setPreviousSchool] = useState();
 
   const schoolRef = useRef();
   const messageRef = useRef();
 
-  useEffect(() => updateHeight(schoolRef), [ school, message ])
+  useEffect(() => updateHeight(schoolRef), [ school, message ]) // message as initial
   useEffect(() => updateHeight(messageRef), [ message ])
 
+  // automatically add "High School" to school name
   useEffect(() => {
     if (previousSchool || !school) return;
     
     setPreviousSchool("select");
     setSchool(school + " High School")
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ school ])
 
+  // keep cursor at user input
   useEffect(() => {
     if (previousSchool === "select" && schoolRef.current) 
       schoolRef.current.setSelectionRange(1, 1) 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ school ])
+
+  // handle change with helper
+  const handleSchoolChange = e => {
+    setSchool(e.target.value);
+    setPreviousSchool(null);
+  }
 
   const handleCancel = () => {
     setCountry(null);
@@ -67,6 +80,7 @@ function AddComment() {
     setMessage("");
   }
 
+  // TODO
   const handleSubmit = () => {
     console.log(country, grade, school, message)
   }
@@ -75,100 +89,115 @@ function AddComment() {
     <div className="flex justify-center space-x-20">
 
       {/* flag */}
-      <button onClick={ () => setCountry(true) } 
-          className="flex-none rounded-full w-20 h-20 flex justify-center items-center 
-            bg-white">
-
-          { !country || country === true ? <FlagIcon className="h-6 w-6" />
-            : <div className={ `rounded-full !w-full h-full fi fi-${ country } fis` } />}
+      <button onClick={ () => setCountry(true) } className="flex-none rounded-full w-20 h-20 
+        flex justify-center items-center bg-white">
+        {/* flag placeholder/chosen flag */}
+        { !country || country === true ? <FlagIcon className="h-6 w-6" />
+          : <div className={ `rounded-full !w-full h-full fi fi-${ country } fis` } />}
       </button>
 
-
+      {/* right side */}
       <div className="flex-grow">
         { country !== true ? (
-          <div className="py-4 px-7 bg-white flex flex-col space-y-3">
-            { !message ? <div className='text-primary'>Grade - High School</div> : (
-              <div className='text-primary flex space-x-2 border-none'>
-                <select value={ grade } onChange={ e => setGrade(e.target.value) }>
-                  <option value={ null }>Grade</option>
-                  {[ "Freshman", "Sophomore", "Junior", "Senior", "Parent", "Teacher",
-                      "Alumni", "Pre-High School", "Other" ].map(grade =>
-                      <option key={ grade } value={ grade }>{ grade }</option>)}
-                </select>
-                <div>-</div>
-                <textarea
-                  ref={ schoolRef }
-                  placeholder='High School'
-                  value={ school }
-                  onChange={ e => { setPreviousSchool(school); setSchool(e.target.value) } }
-                  className='flex-grow resize-none focus:outline-none placeholder:italic placeholder-typing'
-                />
-              </div>
-            )}
-            <textarea 
-              ref={ messageRef }
-              placeholder='Add comment...' 
-              value={ message }
-              onChange={ e => setMessage(e.target.value) }
-              className='text-typing placeholder-typing resize-none focus:outline-none placeholder:italic' 
-            />
-          </div>
-        ) : (
           // select flag
           <div className="pb-2 pr-2 flex-grow bg-white">
             { countries.map(country => 
-              <span
-                onClick={ () => setCountry(country) } key={ country }
-                className={ `mt-2 ml-2 rounded-full !w-8 h-8 fi fi-${ country } fis cursor-pointer` } />)}
+              <span onClick={ () => setCountry(country) } key={ country }
+                className={ `mt-2 ml-2 rounded-full !w-8 h-8 fi fi-${ country } fis 
+                cursor-pointer` } />
+            )}
+          </div>
+        
+        ) : (
+          // text inputs
+          <div className="py-4 px-7 bg-white flex text-primary flex-col space-y-3">
+
+            { !message ? <div>Grade - High School</div> : ( // placeholders
+
+              <div className='flex space-x-2 border-none'>
+
+                {/* grade input */}
+                <select value={ grade } onChange={ e => setGrade(e.target.value) }>
+                  <option value={ null }>Grade</option>
+                  {[ "Freshman", "Sophomore", "Junior", "Senior", "Parent", "Teacher",
+                    "Alumni", "Pre-High School", "Other" ].map(grade =>
+                    <option key={ grade } value={ grade }>{ grade }</option>
+                  )}
+                </select>
+
+                <div>-</div>
+
+                {/* school input */}
+                <textarea ref={ schoolRef } placeholder='High School' value={ school }
+                  onChange={ handleSchoolChange } className='flex-grow resize-none 
+                  focus:outline-none placeholder:italic placeholder-typing' />
+
+              </div>
+            )}
+
+            {/* message input */}
+            <textarea ref={ messageRef } placeholder='Add comment...' value={ message }
+              onChange={ e => setMessage(e.target.value) } className='text-typing 
+              placeholder-typing resize-none focus:outline-none placeholder:italic' />
+          
           </div>
         )}
-        { message ? (
+        {/* underneath */}
+        { !message ? null : (
           <div className="my-3 mx-7 flex space-x-2">
-            { !country || !grade || !school ? 
-              <div className='text-red-500'>Add required fields*</div> : null }
+
+            { country && grade && school ? null : 
+              <div className='text-red-500'>Add required fields*</div> }
+
             <div onClick={ handleCancel }>Cancel</div>
             <div onClick={ handleSubmit }>Submit</div>
+
           </div>
-        ) : null }
+        )}
       </div>
 
     </div>
 )}
 
+/** comment, init? */
 function Comment({ comment, className }) { 
   const [isLiked, setIsLiked] = useState();
   
   return (
     <div className={ "flex flex-col space-y-6 " + className }>
       <div className='flex justify-center space-x-20'>
+
         {/* country flag */}
         <div className={ `rounded-full !w-20 h-20 fi fi-${ comment.country } fis` } />
 
+        {/* right side */}
         <div className='flex-grow'>
-          
+
+          {/* text */}
           <div className="py-4 px-7 bg-white flex flex-col space-y-3">
             <div className="text-primary">{ comment.grade + " - " + comment.school }</div>
             <div>{ comment.message }</div>
           </div>
-          
+
+          {/* underneath */}
           <div className="my-3 mx-7 flex space-x-3">
             
             {/* thumbs up */}
             <button onClick={ () => !isLiked ? setIsLiked(true) : setIsLiked() }>
-              { !isLiked 
-                ? <HandThumbUpIcon className={ iconSize } /> 
-                : <HandThumbUpIconSolid className={ iconSize + " text-green-500" } />}
+              { !isLiked ? <HandThumbUpIcon className={ iconSize } /> :
+                <HandThumbUpIconSolid className={ iconSize + " text-green-500" } /> }
             </button>
             
-            { isLiked == null ? <div className='font-mono'>{ comment.likes }</div>
-              : isLiked ? <div className='text-green-500 font-mono'>{ comment.likes + 1 }</div>
-              : <div className='text-red-500 font-mono'>{ comment.likes - 1 }</div> }
+            {/* like count */}
+            { isLiked == null ? <div className='font-mono'>{ comment.likes }</div> :
+              isLiked ? 
+                <div className='text-green-500 font-mono'>{ comment.likes + 1 }</div> :
+                <div className='text-red-500 font-mono'>{ comment.likes - 1 }</div> }
 
             {/* thumbs down */}
             <button onClick={ () => isLiked != null ? setIsLiked(false) : setIsLiked() }>
-              { isLiked !== false
-                ? <HandThumbDownIcon className={ iconSize } />
-                : <HandThumbDownIconSolid className={ iconSize + " text-red-500" } />}
+              { isLiked !== false ? <HandThumbDownIcon className={ iconSize } /> :
+                <HandThumbDownIconSolid className={ iconSize + " text-red-500" } />}
             </button>
 
             <button>Reply</button>
@@ -176,19 +205,23 @@ function Comment({ comment, className }) {
           </div>
 
         </div>
+
       </div>
 
-      { comment.replies.sort(likeSort)
-        .map(comment => <Comment className="ml-20" comment={ comment } key={ comment.message } />)
-      }
+      {/* replies */}
+      { comment.replies.sort(likeSort).map(comment => 
+        <Comment className="ml-20" comment={ comment } key={ comment.message } />
+      )}
     </div>
 )}
 
+/** (content from markdown) */
 export default function Article() {
   const { title } = useParams()
 
   const [content, setContent] = useState({})
 
+  // initial fetch
   useEffect(() => { 
     const fetchContent = async title => {
       const user = await app.logIn(credentials);
@@ -207,22 +240,28 @@ export default function Article() {
         .catch(() => fetchContent("404"))
     }
     fetchContent(title)
-  }, [title])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const iffNot404 = component => content.author && content.date ? component : null;
+  // hide component if 404
+  const iffNot404 = component => !content.author || !content.date ? null : component;
 
   return (
     <SingleStructure>
+
       <ArticleStructure>
         <Markdown markdownText={ content.markdown } />
         { iffNot404(<Metadata author={ content.author } date={ content.date } />) }
       </ArticleStructure>
+
+      {/* comments */}
       { iffNot404(
           <div className="flex flex-col space-y-10">
             <AddComment />
             { comments.sort(likeSort).map(comment => 
-              <Comment comment={ comment } key={ comment.message } />)}
+              <Comment comment={ comment } key={ comment.message } /> )}
           </div>
       )}
+
     </SingleStructure>
 )}
