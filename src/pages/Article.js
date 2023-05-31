@@ -125,7 +125,7 @@ function AddComment() {
         )}
         {/* underneath */}
         { !message ? null : (
-          <div className="my-3 mx-7 flex space-x-2">
+          <div className="my-3 mx-7 flex space-x-4">
 
             { country && grade && school ? null : 
               <div className='text-red-500'>Add required fields*</div> }
