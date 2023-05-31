@@ -77,7 +77,7 @@ function AddComment() {
 
       {/* right side */}
       <div className="flex-grow">
-        { country !== true ? (
+        { country === true ? (
           // select flag
           <div className="pb-2 pr-2 flex-grow bg-white">
             { countries.map(country => 
