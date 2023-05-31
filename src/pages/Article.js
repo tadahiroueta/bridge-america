@@ -34,22 +34,24 @@ function AddComment() {
   useEffect(() => {
     if (previousSchool || !school) return;
     
-    setPreviousSchool("select");
+    setPreviousSchool("cursor");
     setSchool(school + " High School")
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ school ])
 
   // keep cursor at user input
   useEffect(() => {
-    if (previousSchool === "select" && schoolRef.current) 
-      schoolRef.current.setSelectionRange(1, 1) 
+    if (previousSchool !== "cursor" || !schoolRef.current) return;
+      
+    setPreviousSchool("inactive")
+    schoolRef.current.setSelectionRange(1, 1) 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ school ])
+  }, [ previousSchool ])
 
   // handle change with helper
   const handleSchoolChange = e => {
+    setPreviousSchool(school);
     setSchool(e.target.value);
-    setPreviousSchool(null);
   }
 
   const handleCancel = () => {
