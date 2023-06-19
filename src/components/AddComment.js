@@ -19,7 +19,8 @@ export default function AddComment({ onAdd }) {
     const messageRef = useRef();
   
     useEffect(() => updateHeight(schoolRef), [ school, message ]) // message as initial
-    useEffect(() => updateHeight(messageRef), [ message ])
+    // also update message after reappering
+    useEffect(() => updateHeight(messageRef), [ message, country ]) 
   
     // automatically add "High School" to school name
     useEffect(() => {
@@ -122,7 +123,7 @@ export default function AddComment({ onAdd }) {
             <div className="my-3 mx-7 flex space-x-4">
   
               { isSubmittable() ? null : 
-                <div className='text-red-500'>Add required fields*</div> }
+                <div className='text-red-500'>Please fill all fields</div> }
   
               <div onClick={ handleCancel }>Cancel</div>
               <div onClick={ handleSubmit }>Submit</div>
