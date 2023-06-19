@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
 import { app, credentials, getTitle, updateHeight } from "../utils"
-import { ArticleStructure, CardButton, RightWriteStructure, LeftWrite, Markdown, MarkdownEditor, Metadata, Minor, SingleStructure, WriteStructure } from "../components"
+import { ArticleStructure, CardButton, RightWriteStructure, LeftWrite, Markdown, MarkdownEditor, Metadata, Minor, SingleStructure, WriteStructure } from "../elements"
 
 /** page after reviewing submission */
 function Reviewed({ markdown, author, date, review }) {
@@ -28,7 +28,7 @@ function Reviewed({ markdown, author, date, review }) {
 
 
 /** edit, approve, or reject article submission */
-export default function Approve() {
+export default function Review() {
   const { title } = useParams()
   const navigate = useNavigate()
 
@@ -85,7 +85,7 @@ export default function Approve() {
       .then(user => {
         Promise.all([
           // upload article publically
-          user.functions.insertOne("articles", { title, markdown, author, date }),
+          user.functions.insertOne("articles", { title, markdown, author, date, comments: [] }),
           // add to list
           user.functions.findOne("titles", { collection: "articles" })
             .then(({ titles }) => user.functions.updateOne(

@@ -2,13 +2,13 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom/client"; // client is more proper, apparently
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Write from "./pages/Write";
-import Admin from "./pages/Admin";
-import Layout from "./pages/Layout";
-import Welcome from "./pages/Welcome";
-import Article from "./pages/Article";
-import Approve from "./pages/Approve";
-import Skirmish from "./pages/Skirmish";
+import Write from "./components/Write";
+import Admin from "./components/Admin";
+import Layout from "./components/Layout";
+import Review from "./components/Review";
+import Welcome from "./components/Welcome";
+import Article from "./components/Article";
+import Skirmish from "./components/Skirmish";
 import "./index.scss";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -24,7 +24,7 @@ root.render(
           {/* unbeknown to the public */}
           <Route path="admin" element={ <Admin /> } /> 
           <Route path="skirmish" element={ <Skirmish /> } />
-          <Route path="admin/:title" element={ <Approve /> } />
+          <Route path="admin/:title" element={ <Review /> } />
           
           <Route path=":title" element={ <Article /> } />
         

@@ -37,3 +37,6 @@ export function getTitle(markdown) {
         .replace(/\//g, '-')
         .toLowerCase();
 }
+
+// sort by number of likes
+export function likeSort(a, b) { return a.likes < b.likes ? 1 : -1; }

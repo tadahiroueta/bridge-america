@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { addLinks, app, credentials } from "../utils";
-import { ListArticles, SingleStructure } from "../components";
+import { ListArticles, SingleStructure } from "../elements";
 
 /** access to article submissions */
 export default function Admin() {

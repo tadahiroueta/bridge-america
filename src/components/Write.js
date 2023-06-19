@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { app, credentials, getTitle, updateHeight } from "../utils";
-import { ArticleStructure, CardButton, Card, RightWriteStructure, LeftWrite, Markdown, MarkdownEditor, Metadata, SingleStructure, WriteStructure } from "../components";
+import { ArticleStructure, CardButton, Card, RightWriteStructure, LeftWrite, Markdown, MarkdownEditor, Metadata, SingleStructure, WriteStructure } from "../elements";
 
 const today = new Date().toLocaleDateString("en-US",
   { month: "2-digit", day: "2-digit", year: "numeric" });
