@@ -62,7 +62,7 @@ export default function AddComment({ onAdd }) {
   }
 
   return (
-    <div className="flex justify-center space-x-20">
+    <div className="mb-10 flex justify-center space-x-20">
 
       {/* flag */}
       <button onClick={ () => setCountry(true) } className="flex-none rounded-full w-20 h-20 

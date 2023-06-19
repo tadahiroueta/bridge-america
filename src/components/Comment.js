@@ -89,7 +89,7 @@ export default function Comment({ comment, onUpdate }) {
       </div>
 
       {/* replies */}
-      <div className="ml-20 flex flex-col space-y-10">
+      <div className="ml-20 flex flex-col">
         { isReplying ? <AddComment onAdd={ add } /> : null }
         { comment.replies.map((comment, i) => 
             <Comment comment={ comment } onUpdate={ reply => update(reply, i) } 

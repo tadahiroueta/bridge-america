@@ -66,8 +66,7 @@ export default function Article() {
 
       {/* comments */}
       { iffNot404(
-          <div className="flex flex-col space-y-10">
-
+          <div className="flex flex-col">
             <AddComment onAdd={ addComment } />
             { !content.comments ? null : content.comments.map((comment, i) => 
                 <Comment comment={ comment } 
