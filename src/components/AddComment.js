@@ -62,11 +62,11 @@ export default function AddComment({ onAdd }) {
   }
 
   return (
-    <div className="mb-10 flex justify-center space-x-20">
+    <div className="mb-10 flex justify-center space-x-4 md:space-x-20">
 
       {/* flag */}
-      <button onClick={ () => setCountry(true) } className="flex-none rounded-full w-20 h-20 
-        flex justify-center items-center bg-white">
+      <button onClick={ () => setCountry(true) } className="h-12 w-12 flex-none 
+        rounded-full flex justify-center items-center bg-white md:h-20 md:w-20">
         {/* flag placeholder/chosen flag */}
         { !country || country === true ? <FlagIcon className="h-6 w-6" />
           : <div className={ `rounded-full !w-full h-full fi fi-${ country } fis` } />}
@@ -86,11 +86,11 @@ export default function AddComment({ onAdd }) {
         
         ) : (
           // text inputs
-          <div className="py-4 px-7 bg-white flex text-primary flex-col space-y-3">
+          <div className="py-3 px-4 bg-white flex text-primary flex-col space-y-3 md:py-4 md:px-7">
 
             { !message ? <div>Grade - High School</div> : ( // placeholders
 
-              <div className='flex space-x-2 border-none'>
+              <div className='space-y-2 space-x-2 border-none md:flex '>
 
                 {/* grade input */}
                 <select value={ grade } onChange={ e => setGrade(e.target.value) }>
@@ -101,12 +101,13 @@ export default function AddComment({ onAdd }) {
                   )}
                 </select>
 
-                <div>-</div>
-
-                {/* school input */}
-                <textarea ref={ schoolRef } placeholder='High School' value={ school }
-                  onChange={ handleSchoolChange } className='flex-grow resize-none 
-                  focus:outline-none placeholder:italic placeholder-typing' />
+                <div className="flex space-x-2">
+                  <div>-</div>
+                  {/* school input */}
+                  <textarea ref={ schoolRef } placeholder='High School' value={ school }
+                    onChange={ handleSchoolChange } className='flex-grow resize-none 
+                    focus:outline-none placeholder:italic placeholder-typing' />
+                </div>
 
               </div>
             )}
@@ -120,7 +121,7 @@ export default function AddComment({ onAdd }) {
         )}
         {/* underneath */}
         { !message ? null : (
-          <div className="my-3 mx-7 flex space-x-4">
+          <div className="my-3 mx-7 flex flex-wrap space-x-4">
 
             { isSubmittable() ? null : 
               <div className='text-red-500'>Please fill all fields</div> }

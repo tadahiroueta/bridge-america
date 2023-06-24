@@ -45,16 +45,16 @@ export default function Comment({ comment, onUpdate }) {
   return (
     <div className="flex flex-col space-y-6">
 
-        <div className='flex justify-center space-x-20'>
+        <div className='flex justify-center space-x-4 md:space-x-20'>
 
         {/* country flag */}
-        <div className={ `rounded-full !w-20 h-20 fi fi-${ comment.country } fis` } />
+        <div className={ `rounded-full h-12 !w-12 flex-shrink-0 fi fi-${ comment.country } fis md:!w-20 md:h-20` } />
 
         {/* right side */}
         <div className='flex-grow'>
 
           {/* text */}
-          <div className="py-4 px-7 bg-white flex flex-col space-y-3">
+          <div className="py-3 px-4 bg-white flex flex-col space-y-3 md:py-4 md:px-7">
             <div className="text-primary">{ comment.grade + " - " + comment.school }</div>
             <div>{ comment.message }</div>
           </div>

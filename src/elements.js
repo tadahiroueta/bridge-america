@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown'
 /** A single centered column taking most of the page */
 export function SingleStructure({ children }) { return (
   <div className="flex justify-center">
-    <div className='w-2/3 flex flex-col space-y-48'>
+    <div className='w-11/12 flex flex-col space-y-36 md:w-2/3'>
       { children }
     </div>
   </div>
@@ -14,7 +14,7 @@ export function SingleStructure({ children }) { return (
  * (classname applies to inner div)
  */
 export function ArticleStructure({ className, children }) { return (
-  <div className={ "flex justify-between " + className }>
+  <div className={ "flex flex-col items-start justify-end space-y-8 md:flex-row md:justify-between md:space-y-0 " + className }>
     { children }
   </div>
 )}
@@ -22,7 +22,7 @@ export function ArticleStructure({ className, children }) { return (
 /** space for two articles */
 export function WriteStructure({ children }) { return (
   <div className="flex justify-center">
-    <ArticleStructure className="space-x-12 w-min">
+    <ArticleStructure className="w-11/12 flex-col-reverse space-y-0 md:w-min md:space-x-12">
       { children }
     </ArticleStructure>
   </div>
@@ -44,9 +44,10 @@ export function Card({ className, children }) { return (
 
 /** converts markdown to styled html */
 export function Markdown({ markdownText }) { return (
-    <ReactMarkdown className="px-7 py-6 w-[40rem] bg-white prose prose-h1:text-primary 
-    prose-h1:mb-6 prose-h3:font-bold prose-h3:mt-0 prose-a:no-underline prose-a:text-primary 
-    prose-a:font-semibold prose-img:mt-0">{ markdownText }</ReactMarkdown>
+  <ReactMarkdown className="p-5 w-full bg-white prose prose-h1:text-primary 
+    prose-h1:mb-6 prose-h3:font-bold prose-h3:mt-0 prose-a:no-underline 
+    prose-a:text-primary prose-a:font-semibold prose-img:mt-0 md:px-7 md:py-6 
+    md:w-[40rem]">{ markdownText }</ReactMarkdown>
 )}
 
 /** list articles */
@@ -58,12 +59,14 @@ export function ListArticles({ markdown }) { return (
 
 /** common article card */
 export function Metadata({ className, author, date }) { return (
-  <Card className={ "!py-5 " + className }>
-    <div className="text-xl">
-      <span>by </span><span className="text-3xl font-semibold text-primary">{ author }</span>
-    </div>
-    <div className="flex justify-end text-lg">{ date }</div>
-  </Card>
+  <div className="flex justify-end">
+    <Card className={ "!py-5 " + className }>
+      <div className="text-xl">
+        <span>by </span><span className="text-3xl font-semibold text-primary">{ author }</span>
+      </div>
+      <div className="flex justify-end text-lg">{ date }</div>
+    </Card>
+  </div>
 )}
 
 /** minor sentence card */
@@ -74,7 +77,7 @@ export function Minor({ className, children }) { return (
 export function LeftWrite({ markdown, author, authorReference, authorOnChange, date, 
   dateReference, dateOnChange }) { 
   return (
-    <div className="space-y-7">
+    <div className="mt-8 space-y-7 md:mt-0">
       <Markdown markdownText={ markdown } />
       <Card className="float-right !py-5">
 
@@ -97,7 +100,7 @@ export function LeftWrite({ markdown, author, authorReference, authorOnChange, d
 /** where the user can write for the markdown */
 export function MarkdownEditor({ markdown, markdownReference, markdownOnChange }) { 
   return <textarea ref={ markdownReference } value={ markdown } onChange={ markdownOnChange } 
-    className="px-7 py-6 w-[40rem] text-typing resize-none focus:outline-none" />
+    className="px-7 py-6 w-full text-typing resize-none focus:outline-none md:w-[40rem]" />
 }
 
 /** */
