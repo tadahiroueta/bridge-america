@@ -22,7 +22,7 @@ export function ArticleStructure({ className, children }) { return (
 /** space for two articles */
 export function WriteStructure({ children }) { return (
   <div className="flex justify-center">
-    <ArticleStructure className="w-11/12 flex-col-reverse space-y-0 md:w-min md:space-x-12">
+    <ArticleStructure className="w-11/12 flex-col-reverse !space-y-0 md:w-min md:space-x-12">
       { children }
     </ArticleStructure>
   </div>
@@ -30,14 +30,14 @@ export function WriteStructure({ children }) { return (
 
 /** space between markdown editor and button */
 export function RightWriteStructure({ children }) { return (
-  <div className="space-y-5 h-min">
+  <div className="space-y-5 h-min w-full">
     { children }
   </div>
 )}
 
 /** for information beside articles */
 export function Card({ className, children }) { return (
-  <div className={ "px-6 py-3 w-72 h-min bg-white " + className }>
+  <div className={ "float-right px-6 py-3 w-72 h-min bg-white " + className }>
     { children }
   </div>
 )}
@@ -59,7 +59,7 @@ export function ListArticles({ markdown }) { return (
 
 /** common article card */
 export function Metadata({ className, author, date }) { return (
-  <div className="flex justify-end">
+  <div className="float-right flex justify-end md:float-none">
     <Card className={ "!py-5 " + className }>
       <div className="text-xl">
         <span>by </span><span className="text-3xl font-semibold text-primary">{ author }</span>
@@ -90,7 +90,7 @@ export function LeftWrite({ markdown, author, authorReference, authorOnChange, d
 
         <textarea ref={ dateReference } value={ date } onChange={ dateOnChange } 
           readOnly={ !dateOnChange }
-          className="float-right text-right !h-7 resize-none focus:outline-none" 
+          className="float-right !h-7 bg-transparent text-right resize-none focus:outline-none" 
         />
 
       </Card>
@@ -106,6 +106,6 @@ export function MarkdownEditor({ markdown, markdownReference, markdownOnChange }
 /** */
 export function CardButton({ onClick, className, children }) { return (
   <button onClick={ onClick } className={ "float-right " + className }>
-    <Card className="!px-4 w-min font-semibold text-3xl">{ children }</Card>
+    <Card className="text-2xl !px-4 w-min font-semibold md:text-3xl">{ children }</Card>
   </button>
 )}

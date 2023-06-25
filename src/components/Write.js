@@ -15,7 +15,7 @@ function Submitted({ markdown, author }) { return (
       <Markdown markdownText={ markdown } />
       
       {/* right side */}
-      <div className="space-y-6 text-lg">
+      <div className="w-min space-y-6 text-lg">
 
         <Metadata author={ author } date={ today } />
 
