@@ -111,6 +111,7 @@ export default function Write() {
           <ul>
             { !todos ? null : todos.map(todo => (
               <li key={ todo } className="cursor-pointer">
+                {/* eslint-disable-next-line */}
                 <a onClick={ () => handleClick(todo) }>{ titlelise(todo) }</a>
               </li>
             ))}
