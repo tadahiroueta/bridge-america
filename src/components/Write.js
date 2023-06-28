@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
-import { app, credentials, getTitle, updateHeight } from "../utils";
+import { app, credentials, getTitle, titlelise, updateHeight } from "../utils";
 import { ArticleStructure, CardButton, Card, RightWriteStructure, LeftWrite, Markdown, MarkdownEditor, Metadata, SingleStructure, WriteStructure } from "../elements";
 
 const today = new Date().toLocaleDateString("en-US",
   { month: "2-digit", day: "2-digit", year: "numeric" });
 
 /** thank you message for writers */
-function Submitted({ markdown, author }) { return (
+function Written({ markdown, author }) { return (
   <SingleStructure>
     <ArticleStructure>
 
@@ -33,26 +33,14 @@ function Submitted({ markdown, author }) { return (
 )}
 
 /** where people can submit articles */
-export default function Write() {
-  const [ markdown, setMarkdown ] = useState("");
+function Writing({ template }) {
+  const [ markdown, setMarkdown ] = useState(template);
   const [ author, setAuthor ] = useState("Name");
-  const [ isSubmitted, setIsSubmitted ] = useState(false);
+  const [ written, setWritten ] = useState(false);
   
   const markdownReference = useRef();
   const authorReference = useRef();
   const dateReference = useRef();
-
-  // initial fetch
-  useEffect(() => {
-    updateHeight(authorReference)
-
-    const fetchContent = async () => {
-      const user = await app.logIn(credentials);
-      user.functions.findOne("articles", { title: "write" })
-        .then(article => setMarkdown(article.markdown))
-    }
-    fetchContent()
-  }, []);
 
   useEffect(() => updateHeight(markdownReference), [ markdown ])
   useEffect(() => updateHeight(authorReference), [ author ])
@@ -72,12 +60,12 @@ export default function Write() {
             "titles", { collection: "uploads" }, { 
               $set: { titles: [ ...titles, title ]}
       }))]))
-      .then(() => setIsSubmitted(true))
+      .then(() => setWritten(true))
       .catch((e) => console.log(e));
   }
 
   // show thank you message
-  return isSubmitted ? <Submitted markdown={ markdown } author={ author } /> : (
+  return written ? <Written markdown={ markdown } author={ author } /> : (
     <WriteStructure>
 
       <LeftWrite markdown={ markdown } author={ author } authorReference={ authorReference }
@@ -92,3 +80,43 @@ export default function Write() {
 
     </WriteStructure>
 )}
+
+export default function Write() {
+  const [ todos, setTodos ] = useState([]);
+  const [ template, setTemplate ] = useState("");
+  const [ writing, setWriting ] = useState(false);
+
+  // initial fetch
+  useEffect(() => { (async () => {
+    const user = await app.logIn(credentials);
+    Promise.all([
+      user.functions.findOne("articles", { title: "write" }),
+      user.functions.findOne("titles", { collection: "todos" })
+    ])
+      .then(([ article, titles ]) => {
+        setTemplate(article.markdown);
+        setTodos(titles.titles);
+  })})()}, [])
+
+  const handleClick = todo => {
+    setTemplate("# " + titlelise(todo) + " " + template)
+    setWriting(true)
+  }
+
+  return writing ? <Writing template={ template } /> : (
+    <SingleStructure>
+      <ArticleStructure>
+        <div className="p-5 w-full bg-white prose prose-h1:text-primary prose-h1:mb-6 prose-h3:font-bold prose-h3:mt-0 prose-a:no-underline prose-a:text-primary prose-a:font-semibold prose-img:mt-0 md:px-7 md:py-6 md:w-[40rem]">
+          <h3>Writing topic suggestions:</h3>
+          <ul>
+            { !todos ? null : todos.map(todo => (
+              <li key={ todo } className="cursor-pointer">
+                <a onClick={ () => handleClick(todo) }>{ titlelise(todo) }</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </ArticleStructure>
+    </SingleStructure>
+  )
+}

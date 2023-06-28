@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { addLinks, app, credentials } from "../utils";
+import { addLinks, app, credentials, titlelise } from "../utils";
 import { ListArticles, SingleStructure } from "../elements";
 
 export default function Welcome() {
@@ -11,7 +11,7 @@ export default function Welcome() {
     "# Welcome to America\n\n### Here are some things you might want to know:\n\n" + 
     // list articles
     links.sort((a, b) => .5 - Math.random()) // shuffle
-      .map(link => `* ${ link.replace(/-/g, ' ').toUpperCase() }`).join('\n')
+      .map(link => `* ${ titlelise(link) }`).join('\n')
 
   , links));
 
