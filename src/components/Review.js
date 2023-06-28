@@ -55,7 +55,7 @@ export default function Review() {
         })
         .catch(() => navigate("/404"))
     }
-    fetchContent("uploads", title)
+    fetchContent("articles", title)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -65,7 +65,7 @@ export default function Review() {
 
   const deleteUpload = user => Promise.all([
     // delete private upload
-    user.functions.deleteOne("uploads", { title }),
+    user.functions.deleteOne("articles", { title }),
     // delete from list
     user.functions.findOne("titles", { collection: "uploads" })
       .then(({ titles }) => user.functions.updateOne(
@@ -85,7 +85,7 @@ export default function Review() {
       .then(user => {
         Promise.all([
           // upload article publically
-          user.functions.insertOne("articles", { title, markdown, author, date, comments: [] }),
+          user.functions.insertOne("articles", { title, markdown, author, date, comments: [], approved: true }),
           // add to list
           user.functions.findOne("titles", { collection: "articles" })
             .then(({ titles }) => user.functions.updateOne(

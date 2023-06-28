@@ -64,7 +64,8 @@ export default function Write() {
       // run in parallel
       .then(user => Promise.all([
         // upload article privately
-        user.functions.insertOne("uploads", { title, markdown, author, date: today }),
+        user.functions.insertOne("articles", 
+          { title, markdown, author, date: today, approved: false }),
         // add to list
         user.functions.findOne("titles", { collection: "uploads" })
           .then(({ titles }) => user.functions.updateOne(
