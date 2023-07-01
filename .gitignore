@@ -27,3 +27,5 @@ yarn-error.log*
 skirmish.*
 **/skimish.*
 **/**/skirmish.*
+
+pacakge-lock.json
