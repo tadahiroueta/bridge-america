@@ -75,6 +75,11 @@ export default function Review() {
 
   const handleReject = () => app.logIn(credentials)
     .then(deleteUpload)
+    .then(user.functions.findOne("titles", { collection: "todos" }))
+    .then(({ titles }) => user.functions.updateOne(
+      "titles", { collection: "todos" }, {
+        $set: { titles: [ ...titles, title ]}
+    }))
     .then(() => setReview("rejected"));
 
   const handleApprove = () => {

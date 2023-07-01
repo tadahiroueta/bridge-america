@@ -59,6 +59,11 @@ function Writing({ template }) {
           .then(({ titles }) => user.functions.updateOne(
             "titles", { collection: "uploads" }, { 
               $set: { titles: [ ...titles, title ]}
+        })),
+        user.functions.findOne("titles", { collection: "todos" })
+          .then(({ titles }) => user.functions.updateOne(
+            "titles", { collection: "todos" }, {
+              $set: { titles: [ ...titles.filter(t => t !== title) ]}
       }))]))
       .then(() => setWritten(true))
       .catch((e) => console.log(e));
