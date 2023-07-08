@@ -55,6 +55,7 @@ export default function Layout({ children }) {
 		}
 
 		allReference.current.addEventListener("click", handleClickOutside)
+		// eslint-disable-next-line
 		return () => { allReference.current.removeEventListener("click", handleClickOutside) }
 	}, [])
 
