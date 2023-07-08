@@ -42,4 +42,4 @@ export function getTitle(markdown) {
 // sort by number of likes
 export function likeSort(a, b) { return a.likes < b.likes ? 1 : -1; }
 
-export function titlelise(title) { return title.replace(/-/g, ' ').toUpperCase() }
+export function titlelise(title) { return !title ? null : title.replace(/-/g, ' ').toUpperCase() }
