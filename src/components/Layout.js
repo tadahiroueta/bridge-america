@@ -48,16 +48,18 @@ export default function Layout({ children }) {
 
 	// clear search when clicking outside
 	useEffect(() => {
+		if (!allReference.current || !searchReference.current) return;
+
 		const handleClickOutside = event => {
 			// outside only
-			if (searchReference.current.contains(event.target)) return;
+			if (!searchReference.current || searchReference.current.contains(event.target)) return;
 			clearSearch()
 		}
 
 		allReference.current.addEventListener("click", handleClickOutside)
 		// eslint-disable-next-line
 		return () => { allReference.current.removeEventListener("click", handleClickOutside) }
-	}, [])
+	}, [ allReference, searchReference ])
 
 	const handleSearch = () => {
 		const results = fuzzysort.go(search, titles, { limit: 4, threshold: -10000 }).map(result => result.target)
