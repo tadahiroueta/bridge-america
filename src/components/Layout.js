@@ -1,37 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
+import { Bars3Icon, XMarkIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
+import { app, credentials, titlelise } from "../utils";
+import fuzzysort from "fuzzysort";
 
 function Links({ className }) { return (
 	<div className={ className }>
 		<Link to="">Welcome</Link>
 		<div className="text-slate-300">About</div>
 		<Link to="write">Write</Link>
-	</div>
-)}
-
-/** navigation bar */
-function Navbar({ isMenuOpen, setIsMenuOpen }) { return (
-	<div className="mb-4 h-14 bg-primary flex items-center md:mb-6 md:h-[4.5rem] 
-		md:justify-center">
-		<div className="text-white flex md:w-2/3 md:flex md:items-center md:justify-between">
-
-			<div className="mx-2 flex space-x-2 md:mx-0 md:items-center md:space-x-16">
-				{/* menu */}
-				<Bars3Icon onClick={ () => setIsMenuOpen(!isMenuOpen) } className="h-8 
-					md:hidden" />
-				{/* logo */}
-				<Link className="md:!mx-0" to=""><img src="logo-white.png" alt="BA" className="h-8 md:h-12" /></Link>
-				<Links className="hidden space-x-16 text-xl font-light md:flex" />
-			</div>
-
-			{/* TODO search */}
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.25} stroke="currentColor" className="hidden h-8 mr-4 text-slate-300 md:block">
-				<path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-			</svg>
-
-		</div>
 	</div>
 )}
 
@@ -46,12 +24,87 @@ function Menu({ onClick }) { return (
 )}
 
 export default function Layout({ children }) { 
-	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	const [ isMenuOpen, setIsMenuOpen ] = useState(false)
+	const [ isSearching, setIsSearching ] = useState(false)
+	const [ search, setSearch ] = useState("")
+	const [ titles, setTitles ] = useState([])
+	const [ results, setResults ] = useState([])
+
+	const allReference = useRef(null)
+	const searchReference = useRef(null)
+
+	// fetch titles
+	useEffect(() => {
+		app.logIn(credentials)
+			.then(user => user.functions.findOne("titles", { collection: "articles" }))
+			.then(titles => setTitles(titles.titles))
+	}, [])
+
+	const clearSearch = () => {
+		setSearch("")
+		setIsSearching(false)
+		setResults([])
+	}
+
+	// clear search when clicking outside
+	useEffect(() => {
+		const handleClickOutside = event => {
+			// outside only
+			if (searchReference.current.contains(event.target)) return;
+			clearSearch()
+		}
+
+		allReference.current.addEventListener("click", handleClickOutside)
+		return () => { allReference.current.removeEventListener("click", handleClickOutside) }
+	}, [])
+
+	const handleSearch = () => {
+		const results = fuzzysort.go(search, titles, { limit: 4, threshold: -10000 }).map(result => result.target)
+		if (!results.length) {
+			setResults([ null ])
+			return 
+		}
+		setResults(results);
+	}
 
 	return isMenuOpen ? <Menu onClick={ () => setIsMenuOpen(false) } /> : (
-    <div className="min-h-screen flex flex-col bg-zinc-100">
+    <div ref={ allReference } className="min-h-screen flex flex-col bg-zinc-100">
 
-			<Navbar isMenuOpen={ isMenuOpen } setIsMenuOpen={ setIsMenuOpen }/>
+			<div className="mb-4 h-14 bg-primary flex items-center md:mb-6 md:h-[4.5rem] 
+				md:justify-center">
+				<div className="mx-4 w-full text-white flex justify-between items-center md:w-2/3">
+
+					<div className={ "flex space-x-2 md:mx-0 md:items-center md:space-x-16 md:flex " + (isSearching ? "hidden" : null) }>
+						{/* menu */}
+						<Bars3Icon onClick={ () => setIsMenuOpen(!isMenuOpen) } className="h-8 
+							md:hidden" />
+						{/* logo */}
+						<Link className="md:!mx-0" to=""><img src="logo-white.png" alt="BA" className="h-8 md:h-12" /></Link>
+						<Links className="hidden space-x-16 text-xl font-light md:flex" />
+					</div>
+
+					{/* search */}
+					<div ref={ searchReference } className={ "h-8 flex items-center space-x-2 relative " + (isSearching ? "w-full md:w-1/3" : null) }>
+						
+						<MagnifyingGlassIcon onClick={ () => setIsSearching(true) } className="h-full" />
+						
+						<div className="flex-grow relative">
+
+							{ isSearching && <input autoFocus value={ search } onChange={ e => setSearch(e.target.value) } onKeyUp={ ({ key }) => { if (key === "Enter") handleSearch() }} className="h-full w-full bg-transparent border-b border-white text-white outline-none" /> }
+							
+							{/* search results */}
+							{ !results.length || (
+								<div className="py-1 absolute w-full bg-primary divide-y divide-solid">
+									{ results.map(result => <div key={ result } className="py-0.5 px-2"><a href={ result }>{ titlelise(result) || "No matching articles ):" }</a></div>) }
+								</div>
+							)}
+
+						</div>
+					
+					</div>							
+
+				</div>
+			</div>
 
 			{ children }
 
