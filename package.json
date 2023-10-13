@@ -4,21 +4,14 @@
   "private": true,
   "dependencies": {
     "@heroicons/react": "^2.0.18",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "flag-icons": "^6.6.6",
+    "flag-icons": "^6.11.1",
     "fuzzysort": "^2.0.4",
-    "mongodb": "^5.4.0",
-    "mongodb-realm-cli": "^2.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-markdown": "^8.0.7",
-    "react-router-dom": "^6.11.1",
+    "react-markdown": "^9.0.0",
+    "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
-    "realm-web": "^2.0.0",
-    "sass": "^1.62.1",
-    "web-vitals": "^2.1.4"
+    "realm-web": "^2.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -27,10 +20,7 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -45,7 +35,7 @@
     ]
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.9",
-    "tailwindcss": "^3.3.2"
+    "@tailwindcss/typography": "^0.5.10",
+    "tailwindcss": "^3.3.3"
   }
 }

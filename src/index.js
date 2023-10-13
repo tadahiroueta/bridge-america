@@ -1,35 +1,33 @@
-import { StrictMode } from "react";
-import ReactDOM from "react-dom/client"; // client is more proper, apparently
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import Write from "./components/Write";
-import Admin from "./components/Admin";
-import Layout from "./components/Layout";
-import Review from "./components/Review";
-import Welcome from "./components/Welcome";
-import Article from "./components/Article";
-import Skirmish from "./components/Skirmish";
-import "./index.scss";
+import './index.css';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+import Layout from './components/Layout';
+import Welcome from './components/Welcome';
+import About from './components/About';
+import Article from './components/Article';
+import Contribute from './components/Contribute';
+import Submitted from './components/Submitted';
+import Admin from './components/Admin';
+import Review from './components/Review';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <StrictMode> {/* avoid build errors */}
-    <BrowserRouter>
-      <Layout> {/* applied on all pages */}
-        <Routes>
+  <BrowserRouter>
+    <Layout>
+      <Routes>
 
-          <Route path="" element={ <Welcome /> } />
-          <Route path="write" element={ <Write /> } />
+        <Route path="" element={ <Welcome /> } />
+        <Route path="about" element={ <About /> } />
+        <Route path="contribute" element={ <Contribute /> } />
+        <Route path="admin" element={ <Admin /> } />
 
-          {/* unbeknown to the public */}
-          <Route path="admin" element={ <Admin /> } /> 
-          <Route path="skirmish" element={ <Skirmish /> } />
-          <Route path="admin/:title" element={ <Review /> } />
-          
-          <Route path=":title" element={ <Article /> } />
-        
-        </Routes>
-      </Layout>
-    </BrowserRouter>
-  </StrictMode>
-)
+        <Route path=":term" element={ <Article /> } />
+        <Route path="submitted/:term" element={ <Submitted /> } />
+        <Route path='review/:term' element={ <Review /> } />
+
+      </Routes>
+    </Layout>
+  </BrowserRouter>
+);

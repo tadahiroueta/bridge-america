@@ -7,6 +7,7 @@ export const app = new App({ id: REALM_APP_ID });
 export const credentials = Credentials.anonymous();
 
 export function addLinks(markdown, links, title=null, admin=false) {
+    if (!markdown || !links) return null;
     // skip the title
     const lines = markdown.split('\n');
     const firstLine = lines[0];

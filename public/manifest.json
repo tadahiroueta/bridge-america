@@ -1,15 +1,16 @@
 {
-  "short_name": "Bridge America",
-  "name": "Bridge America",
-  "icons": [
-    {
-      "src": "logo.png",
-      "sizes": "768x768",
-      "type": "image/png"
-    }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#56A254",
-  "background_color": "#f5f5f5"
+    "short_name": "Bridge America",
+    "name": "Bridge America",
+    "icons": [
+      {
+        "src": "logo.png",
+        "sizes": "1500x1500",
+        "type": "image/png"
+      }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#749987",
+    "background_color": "#F6F1F1"
 }
+  

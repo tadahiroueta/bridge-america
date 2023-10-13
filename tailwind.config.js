@@ -1,13 +1,20 @@
-const colors = require("tailwindcss/colors")
-const defaultTheme = require("tailwindcss/defaultTheme")
+const defaultTheme = require( "tailwindcss/defaultTheme" )
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [ "./src/**/*.js"], // apply to all JS files in src folder
-  theme: { extend: {
-    colors: { primary: "#56A254", typing: colors.gray[500] },
-    fontFamily: { sans: [ "Poppins", ...defaultTheme.fontFamily.sans ]},
-    height: { "18": "4.5rem" }
+  content: [ "./src/**/*.js" ],
+  theme: { extend: { 
+    colors: { ashes: {
+      100: "#FFFFFF",
+      300: "#F6F1F1",
+      500: "#555B6E",
+      700: "#749987",
+      900: "#C4E3BE"
+    }},
+    fontFamily: { 
+      sans: [ "Nunito", ...defaultTheme.fontFamily.sans ],
+      title: [ "Archivo", ...defaultTheme.fontFamily.sans ]
+    }
   }},
-  plugins: [ require("@tailwindcss/typography") ],
+  plugins: [ require( "@tailwindcss/typography" )]
 }

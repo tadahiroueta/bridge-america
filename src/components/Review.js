@@ -1,130 +1,105 @@
-import { useEffect, useRef, useState } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { app, credentials, getTitle, updateHeight } from "../utils"
-import { ArticleStructure, CardButton, RightWriteStructure, LeftWrite, Markdown, MarkdownEditor, Metadata, Minor, SingleStructure, WriteStructure } from "../elements"
+import { app, credentials, updateHeight } from "../utils";
 
-/** page after reviewing submission */
-function Reviewed({ markdown, author, date, review }) {
-  return (
-    <SingleStructure>
-      <ArticleStructure>
+import Editor from "./Editor";
+import Markdown from "./Markdown";
 
-        {/* left side */}
-        <Markdown markdownText={ markdown } />
-        
-        {/* right side */}
-        <div className="space-y-6 text-lg">
-          <Metadata author={ author } date={ date } />
-          { review === "approved" ? 
-            <Minor className="text-primary">Approved</Minor> : 
-            <Minor className="text-red-500">Rejected</Minor> 
-          }
-        </div>
+const today = new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })
 
-      </ArticleStructure>
-    </SingleStructure>
-)}
-
-
-/** edit, approve, or reject article submission */
 export default function Review() {
-  const { title } = useParams()
+  const { term } = useParams()
+
+  const [groups, setGroups] = useState({})
+  const [group, setGroup] = useState('')
+  const [author, setAuthor] = useState('')
+  const [markdown, setMarkdown] = useState("loading...")
+
+  const markdownRef = useRef()
+
   const navigate = useNavigate()
 
-  const [ markdown, setMarkdown ] = useState()
-  const [ author, setAuthor ] = useState()
-  const [ date, setDate ] = useState()
-  const [ review, setReview ] = useState("reviewing")
-
-  const markdownReference = useRef()
-  const authorReference = useRef()
-  const dateReference = useRef()
-  
   // initial fetch
-  useEffect(() => {
-    const fetchContent = async (collection, title) => {
-      const user = await app.logIn(credentials);
-      user.functions.findOne(collection, { title })
-        .then(article => {
-          if (!article) throw new Error("404")
-
-          setMarkdown(article.markdown)
-          setAuthor(article.author)
-          setDate(article.date)
-        })
-        .catch(() => navigate("/404"))
-    }
-    fetchContent("articles", title)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => updateHeight(markdownReference), [ markdown ])
-  useEffect(() => updateHeight(authorReference), [ author ])
-  useEffect(() => updateHeight(dateReference), [ date ])
-
-  const deleteUpload = user => Promise.all([
-    // delete private upload
-    user.functions.deleteOne("articles", { title }),
-    // delete from list
+  useEffect(() => { (async () => {
+    const user = await app.logIn(credentials)
+    // check if article is uploaded and pending approval
     user.functions.findOne("titles", { collection: "uploads" })
-      .then(({ titles }) => user.functions.updateOne(
-        "titles", { collection: "uploads" }, { 
-          $set: { titles: titles.filter(t => t !== title)
-  }}))]);
-
-  const handleReject = () => app.logIn(credentials)
-    .then(user => Promise.all([
-      deleteUpload(user),
-      user.functions.findOne("titles", { collection: "todos" })
-        .then(({ titles }) => user.functions.updateOne(
-          "titles", { collection: "todos" }, {
-            $set: { titles: [ ...titles, title ]}
-    }))]))
-    .then(() => setReview("rejected"));
-
-  const handleApprove = () => {
-    const title = getTitle(markdown);
-
-    app.logIn(credentials)
-      // add
-      .then(user => {
-        Promise.all([
-          // upload article publically
-          user.functions.insertOne("articles", { title, markdown, author, date, comments: [], approved: true }),
-          // add to list
-          user.functions.findOne("titles", { collection: "articles" })
-            .then(({ titles }) => user.functions.updateOne(
-              "titles", { collection: "articles" }, { 
-                $set: { titles: [ ...titles, title ]}
-        }))])
-        return user // use again
-      })
-      .then(deleteUpload)
-      .then(() => setReview("approved"))
-      .catch(() => alert("Fuck."))
-  }
-
-  return review !== "reviewing" ? // after reviewing
-    <Reviewed markdown={ markdown } author={ author } date={ date } review={ review } /> : (
+      .then(uploads => uploads.titles.includes(term) || navigate("/admin"))
     
-    <WriteStructure>
+    // article
+    user.functions.findOne("articles", { title: term })
+      .then(content => {
+        if (!content) return navigate("/admin")
+        setGroup(content.group)
+        setAuthor(content.author)
+        setMarkdown(content.markdown)
+      })
+    
+    // groups
+    user.functions.findOne("titles", { collection: "groups" })
+      .then(groups => setGroups(groups.groups))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  })()}, [])
 
-      <LeftWrite markdown={ markdown } author={ author } authorReference={ authorReference }
-        authorOnChange={ e => setAuthor(e.target.value) } date={ date }
-        dateReference={ dateReference } dateOnChange={ e => setDate(e.target.value) } />
+  // update markdown height
+  useEffect(() => updateHeight(markdownRef), [ markdown ])
 
-      <RightWriteStructure>
+  const removeUpload = user => 
+    user.functions.findOne("titles", { collection: "uploads" })
+      .then(uploads => 
+        user.functions.updateOne("titles", { collection: "uploads" }, { $set: { titles: uploads.titles.filter(t => t !== term) }})
+      )
 
-        <MarkdownEditor markdown={ markdown } markdownReference={ markdownReference }
-          markdownOnChange={ e => setMarkdown(e.target.value) } />
+  const handleDelete = () => 
+    app.logIn(credentials)
+      .then(user => Promise.all([
+        user.functions.deleteOne("articles", { title: term }),
+        removeUpload(user)
+      ]))
+      .then(() => navigate("/admin"))
+      .catch(console.error)
 
-        <div className="flex justify-end space-x-7">
-          <CardButton onClick={ handleReject } className="text-red-500">Reject</CardButton>
-          <CardButton onClick={ handleApprove } className="text-primary">Approve</CardButton>
+  const handleApprove = () =>
+    app.logIn(credentials)
+      .then(user => Promise.all([
+        removeUpload(user),
+        user.functions.updateOne("articles", { title: term }, { $set: { approved: true, group, author, markdown }}),
+        user.functions.findOne("titles", { collection: "groups" })
+          .then(groups =>
+            user.functions.updateOne("titles", { collection: "groups" }, { $set: { groups: { ...groups.groups, [group]: [ ...groups.groups[group], term ]}}})
+      )]))
+      .then(() => navigate("/" + term))
+      .catch(console.error)
+
+  return (
+    <div className="min-h-screen p-5 space-y-10 bg-ashes-300 md:space-x-16 md:flex md:space-y-0 md:pt-16 md:pb-24 md:justify-center">
+    <Editor
+      groups={ groups }
+      term={ term }
+      group={ group }
+      setGroup={ setGroup }
+      author={ author }
+      setAuthor={ setAuthor }
+      markdown={ markdown }
+      setMarkdown={ setMarkdown }
+      markdownRef={ markdownRef }
+    />
+    <Markdown
+      term={ term }
+      author={ author }
+      markdown={ markdown }
+      date={ today }
+      className="md:w-[33rem] h-fit md:pb-8"
+    >
+      <div className="pt-2.5 w-full justify-center flex space-x-5">
+        <div onClick={ handleDelete } className="px-5 text-xl border-2 rounded-full py-2.5 w-fit border-red-500 text-red-500 cursor-pointer">
+          Delete
         </div>
-
-      </RightWriteStructure>
-
-    </WriteStructure>
+        <div onClick={ handleApprove } className="px-5 text-xl border-2 rounded-full py-2.5 w-fit border-ashes-700 text-ashes-700 cursor-pointer">
+          Approve
+        </div>
+      </div>
+    </Markdown>
+  </div>
 )}

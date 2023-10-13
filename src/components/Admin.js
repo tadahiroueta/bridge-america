@@ -1,33 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
-import { addLinks, app, credentials } from "../utils";
-import { ListArticles, SingleStructure } from "../elements";
+import { app, credentials, titlelise } from "../utils"
 
-/** access to article submissions */
+import { CheckBadgeIcon } from "@heroicons/react/24/outline"
+import { Link } from "react-router-dom"
+
 export default function Admin() {
-  const [ markdown, setMarkdown ] = useState(" ");
-
-  // add markdown to page
-  const write = links => setMarkdown(addLinks(
-    "### To approve:\n\n" + (
-
-      links.sort((a, b) => .5 - Math.random()) // shuffle
-        .map(link => `* ${ link.replace(/-/g, ' ').toUpperCase() }`).join('\n')      
-
-      || "&emsp;Nothing for now." // in case of no submission
-    ),
-    links, null, true
-  ))
+  const [uploads, setUploads] = useState(["loading..."])
 
   // initial fetch
   useEffect(() => { (async () => {
-    const user = await app.logIn(credentials);
+    const user = await app.logIn(credentials)
     user.functions.findOne("titles", { collection: "uploads" })
-      .then(titles => write(titles.titles))
+      .then(uploads => setUploads(uploads.titles))
   })()}, [])
 
   return (
-    <SingleStructure>
-      <ListArticles markdown={ markdown } />
-    </SingleStructure>
-)}
+    <div className="flex justify-center">
+      {/* center content */}
+      <div className="justify-center w-full px-10 pt-24 space-y-8 text-xl font-semibold pb-36 md:w-[26rem]">
+        {/* header */}
+        <div className="flex space-x-2.5 items-center justify-center">
+          <div className="">Review uploads</div>
+          <CheckBadgeIcon className="w-6" />
+        </div>
+        {/* uploads */}
+        <div className="space-y-2.5">
+          { !uploads.length && <div>No uploads</div>}
+          { uploads.map(upload => (
+            <div key={ upload }>
+              <Link to={ "/review/" + upload }>{ titlelise(upload) }</Link>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
