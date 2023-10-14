@@ -124,7 +124,7 @@ export default function Layout({ children }) {
   }
 
   return (
-    <div className="">
+    <div>
       { isMenuOpen && <Menu onClick={ () => setIsMenuOpen(false) } /> }
       <Header 
         setIsMenuOpen={ setIsMenuOpen } 

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { app, credentials, titlelise } from "../utils";
 
 import { MagnifyingGlassIcon, ChevronDownIcon } from "@heroicons/react/20/solid"
 import { CheckCircleIcon, ArchiveBoxIcon } from "@heroicons/react/24/outline"
-
-import { ReactComponent as GoldenBridge } from "../golden-bridge.svg"
-import { Link } from "react-router-dom";
 
 let commonTerms = [
   "weighted-gpa",
@@ -36,12 +34,13 @@ export default function Welcome() {
   return (
     <div className="flex flex-col items-center">
       {/* top screen */}
-      <div className="flex flex-col items-center justify-between w-full h-[calc(100vh-3.5rem)] pt-20 pb-10 overflow-hidden bg-ashes-300">
+      <div className="relative flex flex-col items-center justify-between w-full h-[calc(100svh-3.5rem)] pt-10 md:pt-20 pb-6 md:pb-12 overflow-hidden bg-ashes-300">
         {/* main title */}
-        <div className="z-10 px-8 text-5xl font-medium text-right uppercase text-ashes-500 font-title md:text-8xl md:w-1/2 md:ml-48">Welcome to America</div>
+        <div className="z-10 px-8 text-4xl font-medium text-right uppercase text-ashes-500 font-title md:text-8xl md:w-1/2 md:ml-48">Welcome to America</div>
         {/* link to introductionary article */}
         <Link to="/welcome" className="rounded-full px-5 py-2.5 border-2 text-xl w-fit z-10 ml-24 font-medium border-ashes-700 text-ashes-700 md:ml-48">Learn how it works</Link>
-        <GoldenBridge className="absolute bottom-0 z-0 object-none -left-20 h-2/3 md:h-auto md:w-3/4 md:-bottom-44 md:left-0" />
+        {/* golden gate */}
+        <img src="golden-gate.png" alt="golden gate" className="absolute bottom-0 left-0 object-cover object-[25%_bottom] h-2/3 md:h-[115%] md:top-6" />
       </div>
       {/* about us */}
       <div className="z-10 md:flex md:space-x-24 md:py-36 bg-ashes-100 md:justify-center md:w-full">
