@@ -11,11 +11,9 @@ import Contribute from './components/Contribute';
 import Submitted from './components/Submitted';
 import Admin from './components/Admin';
 import Review from './components/Review';
-import { StrictMode } from 'react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <StrictMode>
   <BrowserRouter>
     <Layout>
       <Routes>
@@ -32,5 +30,4 @@ root.render(
       </Routes>
     </Layout>
   </BrowserRouter>
-  </StrictMode>
 );
