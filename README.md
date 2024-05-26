@@ -21,7 +21,9 @@
 - Mobile First Design
   - Designed for mobile users with the help of TailwindCSS' mobile-first structure
 
+  <br>
   <img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/mobile-first.png" alt="mobile-first" height="400" />
+  <br>
 
 - Cloud database to store articles
   - The website requests articles and comments from the MongoDB through their API
