@@ -34,12 +34,14 @@
   ![writing-articles](https://github.com/tadahiroueta/bridge-america/blob/master/samples/writing-articles.gif)
 
   - Admin access allows me to review and edit articles before going public
-
+  <br>
   <img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/reviewing-articles.png" alt="reviewing-articles" width="50%" />
+  <br>
 
   - Users may comment on articles they've read
-
+  <br>
   <img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/comment.png" alt="comment" width="50%" />
+  <br>
 
 - Figma prototype
   - The entire website was planned first on [Figma](https://www.figma.com/design/rEzNf0bQzHbWnZOMqNM1wq/two?node-id=2-16&t=1aLvMdefA9Ph4NPy-1)
