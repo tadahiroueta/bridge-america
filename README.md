@@ -18,37 +18,37 @@
 
 ## Features
 
-- Mobile First Design
-  - Designed for mobile users with the help of TailwindCSS' mobile-first structure
+### Mobile First Design
+Designed for mobile users with the help of TailwindCSS' mobile-first structure
 
-  <br>
-  <img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/mobile-first.png" alt="mobile-first" height="400" />
-  <br>
+<br>
+<img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/mobile-first.png" alt="mobile-first" height="400" />
+<br>
 
-- Cloud database to store articles
-  - The website requests articles and comments from the MongoDB through their API
+### Cloud database to store articles
+The website requests articles and comments from the MongoDB through their API
 
-  ![mongodb](https://github.com/tadahiroueta/bridge-america/blob/master/samples/mongodb.png)
+![mongodb](https://github.com/tadahiroueta/bridge-america/blob/master/samples/mongodb.png)
 
-- Crowd-sourced architecture
-  - In-site platform to write articles in Markdown with side-by-side, real-time preview
+### Crowd-sourced architecture
+In-site platform to write articles in Markdown with side-by-side, real-time preview
 
-  ![writing-articles](https://github.com/tadahiroueta/bridge-america/blob/master/samples/writing-articles.gif)
+![writing-articles](https://github.com/tadahiroueta/bridge-america/blob/master/samples/writing-articles.gif)
 
-  - Admin access allows me to review and edit articles before going public
-  <br>
-  <img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/reviewing-articles.png" alt="reviewing-articles" width="50%" />
-  <br>
+Admin access allows me to review and edit articles before going public
+<br>
+<img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/reviewing-articles.png" alt="reviewing-articles" width="50%" />
+<br>
 
-  - Users may comment on articles they've read
-  <br>
-  <img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/comment.png" alt="comment" width="50%" />
-  <br>
+Users may comment on articles they've read
+<br>
+<img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/comment.png" alt="comment" width="50%" />
+<br>
 
-- Figma prototype
-  - The entire website was planned first on [Figma](https://www.figma.com/design/rEzNf0bQzHbWnZOMqNM1wq/two?node-id=2-16&t=1aLvMdefA9Ph4NPy-1)
+### Figma prototype
+The entire website was planned first on [Figma](https://www.figma.com/design/rEzNf0bQzHbWnZOMqNM1wq/two?node-id=2-16&t=1aLvMdefA9Ph4NPy-1)
 
-  ![figma](https://github.com/tadahiroueta/bridge-america/blob/master/samples/figma.png)
+![figma](https://github.com/tadahiroueta/bridge-america/blob/master/samples/figma.png)
 
 ## Usage
 
