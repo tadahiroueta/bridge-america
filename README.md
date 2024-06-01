@@ -22,7 +22,7 @@
 Designed for mobile users with the help of TailwindCSS' mobile-first structure
 
 <br>
-<img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/mobile-first.png" alt="mobile-first" height="400" />
+<img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/mobile-first.png" alt="mobile-first" width="248rem" />
 <br>
 
 ### Cloud database to store articles
@@ -37,12 +37,12 @@ In-site platform to write articles in Markdown with side-by-side, real-time prev
 
 Admin access allows me to review and edit articles before going public
 <br>
-<img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/reviewing-articles.png" alt="reviewing-articles" width="50%" />
+<img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/reviewing-articles.png" alt="reviewing-articles" width="376rem" />
 <br>
 
 Users may comment on articles they've read
 <br>
-<img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/comment.png" alt="comment" width="50%" />
+<img src="https://github.com/tadahiroueta/bridge-america/blob/master/samples/comment.png" alt="comment" width="376rem" />
 <br>
 
 ### Figma prototype
