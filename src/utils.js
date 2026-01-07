@@ -1,4 +1,4 @@
-const API_BASE = "/api/functions";
+const API_BASE = "https://bridgeamerica-backend-9vahf.ondigitalocean.app/api/functions";
 
 export const user = {
   functions: {
