@@ -1,4 +1,4 @@
-const API_BASE = "http://11.21.37.195:5001/api/functions";
+const API_BASE = "/api/functions";
 
 export const user = {
   functions: {
