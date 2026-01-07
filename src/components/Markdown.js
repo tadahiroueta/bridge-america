@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addLinks, app, credentials, titlelise } from "../utils";
+import { addLinks, user, titlelise } from "../utils";
 
 import ReactMarkdown from "react-markdown";
 
@@ -7,7 +7,7 @@ export default function Markdown({ term, author, date, markdown, children, class
   const [terms, setTerms] = useState([])
 
   useEffect(() => {(async () => {
-    const user = await app.logIn(credentials)
+    
     user.functions.findOne("titles", { collection: "articles" })
       .then(titles => setTerms(titles.titles))
   })()}, [])

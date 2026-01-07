@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 
-import { addLinks, app, credentials, likeSort, updateHeight } from '../utils';
+import { addLinks, user, likeSort, updateHeight } from '../utils';
 import { countries } from '../data';
 
 import { FlagIcon, HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/outline"
@@ -242,7 +242,6 @@ export default function Article() {
   // initial fetch
   useEffect(() => { 
     const fetchContent = async title => {
-      const user = await app.logIn(credentials);
       // get article and links in parallel
       Promise.all([ 
         user.functions.findOne("articles", { title }), 
@@ -266,8 +265,7 @@ export default function Article() {
     setContent({ ...content, comments }); // update locally
 
     // update database
-    app.logIn(credentials)
-      .then(user => user.functions.updateOne("articles", { title: term }, { $set: { comments }}));
+    user.functions.updateOne("articles", { title: term }, { $set: { comments }});
   }
 
   const addComment = comment => updateComments([ ...content.comments, comment ]);

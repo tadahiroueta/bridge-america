@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { app, credentials, updateHeight } from "../utils"
+import { user, updateHeight } from "../utils"
 
 import Markdown from "./Markdown"
 import Editor from "./Editor"
@@ -21,7 +21,7 @@ export default function Contribute() {
 
   // initial fetch
   useEffect(() => { (async () => {
-    const user = await app.logIn(credentials)
+    
     // groups
     user.functions.findOne("titles", { collection: "groups" })
       .then(groups => setGroups(groups.groups))
@@ -35,16 +35,15 @@ export default function Contribute() {
   useEffect(() => updateHeight(markdownRef), [ markdown ])
 
   const handleSubmit = () => {
-    app.logIn(credentials)
-      .then(user => Promise.all([
-        // upload article privately
-        user.functions.insertOne("articles", { title: term, markdown, author, date: today, approved: false, group }),
-        // add to group
-        user.functions.findOne("titles", { collection: "uploads" })
-          .then(uploads => 
-            user.functions.updateOne("titles", { collection: "uploads" }, { $set: { titles: [ ...uploads.titles, term ]}})
-          )
-      ]))
+    Promise.all([
+      // upload article privately
+      user.functions.insertOne("articles", { title: term, markdown, author, date: today, approved: false, group }),
+      // add to group
+      user.functions.findOne("titles", { collection: "uploads" })
+        .then(uploads => 
+          user.functions.updateOne("titles", { collection: "uploads" }, { $set: { titles: [ ...uploads.titles, term ]}})
+        )
+    ])
       // redirect
       .then(() => navigate(`/submitted/${term}`))
       .catch(console.log)

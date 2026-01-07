@@ -1,10 +1,46 @@
-import { App, Credentials } from 'realm-web'
+const API_BASE = "http://11.21.37.195:5001/api/functions";
 
-const REALM_APP_ID = "application-1-rpvhe";
+export const user = {
+  functions: {
+    findOne: async (collection, query) => {
+      const res = await fetch(`${API_BASE}/findOne/${collection}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      console.log(res.body.values);
+      return res.json();
+    },
 
-export const app = new App({ id: REALM_APP_ID });
+    updateOne: async (collection, filter, update) => {
+      const res = await fetch(`${API_BASE}/updateOne/${collection}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filter, update })
+      });
+      return res.json();
+    },
 
-export const credentials = Credentials.anonymous();
+    insertOne: async (collection, doc) => {
+      const res = await fetch(`${API_BASE}/insertOne/${collection}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(doc)
+      });
+      return res.json();
+    },
+
+    deleteOne: async (collection, query) => {
+      const res = await fetch(`${API_BASE}/deleteOne/${collection}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      return res.json();
+    }
+  }
+};
+
 
 export function addLinks(markdown, links, title=null, admin=false) {
     if (!markdown || !links) return null;

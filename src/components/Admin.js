@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { app, credentials, titlelise } from "../utils"
+import { user, titlelise } from "../utils"
 
 import { CheckBadgeIcon } from "@heroicons/react/24/outline"
 import { Link } from "react-router-dom"
@@ -10,7 +10,6 @@ export default function Admin() {
 
   // initial fetch
   useEffect(() => { (async () => {
-    const user = await app.logIn(credentials)
     user.functions.findOne("titles", { collection: "uploads" })
       .then(uploads => setUploads(uploads.titles))
   })()}, [])

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Markdown from "./Markdown";
-import { app, credentials } from "../utils";
+import { user } from "../utils";
 
 export default function Submitted() {
   const { term } = useParams()
@@ -12,7 +12,7 @@ export default function Submitted() {
 
   // initial fetch
   useEffect(() => { (async () => {
-    const user = await app.logIn(credentials)
+    
     // groups
     user.functions.findOne("articles", { title: term })
       .then(article => setContent(article))

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { go as sort } from "fuzzysort"
 
-import { app, credentials, titlelise } from "../utils"
+import { user, titlelise } from "../utils"
 
 import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/20/solid"
 
@@ -108,8 +108,7 @@ export default function Layout({ children }) {
 
   // fetch titles
 	useEffect(() => {
-		app.logIn(credentials)
-			.then(user => user.functions.findOne("titles", { collection: "articles" }))
+    user.functions.findOne("titles", { collection: "articles" })
 			.then(titles => setTitles(titles.titles))
 	}, [])
 

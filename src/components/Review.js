@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { app, credentials, updateHeight } from "../utils";
+import { user, updateHeight } from "../utils";
 
 import Editor from "./Editor";
 import Markdown from "./Markdown";
@@ -22,7 +22,7 @@ export default function Review() {
 
   // initial fetch
   useEffect(() => { (async () => {
-    const user = await app.logIn(credentials)
+    
     // check if article is uploaded and pending approval
     user.functions.findOne("titles", { collection: "uploads" })
       .then(uploads => uploads.titles.includes(term) || navigate("/admin"))
@@ -52,23 +52,21 @@ export default function Review() {
       )
 
   const handleDelete = () => 
-    app.logIn(credentials)
-      .then(user => Promise.all([
-        user.functions.deleteOne("articles", { title: term }),
-        removeUpload(user)
-      ]))
+    Promise.all([
+      user.functions.deleteOne("articles", { title: term }),
+      removeUpload(user)
+    ])
       .then(() => navigate("/admin"))
       .catch(console.error)
 
   const handleApprove = () =>
-    app.logIn(credentials)
-      .then(user => Promise.all([
-        removeUpload(user),
-        user.functions.updateOne("articles", { title: term }, { $set: { approved: true, group, author, markdown }}),
-        user.functions.findOne("titles", { collection: "groups" })
-          .then(groups =>
-            user.functions.updateOne("titles", { collection: "groups" }, { $set: { groups: { ...groups.groups, [group]: [ ...groups.groups[group], term ]}}})
-      )]))
+    Promise.all([
+      removeUpload(user),
+      user.functions.updateOne("articles", { title: term }, { $set: { approved: true, group, author, markdown }}),
+      user.functions.findOne("titles", { collection: "groups" })
+        .then(groups =>
+          user.functions.updateOne("titles", { collection: "groups" }, { $set: { groups: { ...groups.groups, [group]: [ ...groups.groups[group], term ]}}})
+    )])
       .then(() => navigate("/" + term))
       .catch(console.error)
 

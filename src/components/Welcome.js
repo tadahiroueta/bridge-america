@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { app, credentials, titlelise } from "../utils";
+import { user, titlelise } from "../utils";
 
 import { MagnifyingGlassIcon, ChevronDownIcon } from "@heroicons/react/20/solid"
 import { CheckCircleIcon, ArchiveBoxIcon } from "@heroicons/react/24/outline"
@@ -19,7 +19,6 @@ export default function Welcome() {
   const [groups, setGroups] = useState({})
 
   useEffect(() => { (async () => {
-    const user = await app.logIn(credentials);
     user.functions.findOne("titles", { collection: "groups" })
       .then(({ groups }) => {
         setGroups(groups)
